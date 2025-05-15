@@ -1,4 +1,4 @@
-package main;
+package com.walley.walley;
 
 public class DB {
     public static void print1() {
