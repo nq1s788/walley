@@ -4,7 +4,7 @@ plugins {
 	id 'io.spring.dependency-management' version '1.1.7'
 }
 
-group = 'com.walley'
+group = 'com.walley.walley'
 version = '0.0.1-SNAPSHOT'
 
 java {
@@ -15,16 +15,35 @@ java {
 
 repositories {
 	mavenCentral()
+	maven {
+		url = uri("https://mvnrepository.com/artifact/org.thymeleaf/thymeleaf-spring5")
+	}
 }
 
 dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation("org.thymeleaf:thymeleaf-spring5:3.1.3.RELEASE")
+	implementation("org.postgresql:postgresql:42.1.4")
+	implementation "org.springframework.boot:spring-boot-starter-data-rest:3.4.5"
+	implementation "javax.persistence:javax.persistence-api:2.2"
+	implementation("org.springframework.security:spring-security-core:6.4.5")
+
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	runtimeOnly 'org.postgresql:postgresql'
+	runtimeOnly 'com.h2database:h2'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+tasks.withType(JavaCompile) {
+	options.encoding = 'UTF-8'
+}
+
