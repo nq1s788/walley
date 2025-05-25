@@ -1,14 +1,12 @@
 package com.walley.walley.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 
 //Класс создаёт табличку с пользователями..
 
 @Entity
+@Table(name = "users")
 public class MyUser {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
