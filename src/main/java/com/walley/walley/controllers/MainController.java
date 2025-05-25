@@ -15,7 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class MainController {
 
     @Autowired
-    private AppService service;
+    //private AppService service;
+    private MyUserRepository userRepository;
     //обработка перехода на главную страницу
     @GetMapping("/")
     public String greeting( Model model) {
@@ -27,7 +28,7 @@ public class MainController {
     public String addUser(@RequestParam String email, String password, Model model) {
         MyUser user = new MyUser(email, password);
         if (true) {
-            service.addUser(user);
+            userRepository.save(user);
             return "new user is saved";
         } else {
             return "redirect:/garden";
