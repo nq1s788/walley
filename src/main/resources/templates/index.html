@@ -166,8 +166,8 @@
 
 
         <div id="buttons">
-            <button type="submit" id="register" onclick="register()">Создать аккаунт</button>
-            <button type="submit" id="login" class='active' onclick="login()">Войти</button>
+            <button type="submit" id="register" name = "action" value="register">Создать аккаунт</button>
+            <button type="submit" id="login" class='active' name = "action" value="login">Войти</button>
         </div>
 
         <div class="error" id="errorBox"></div>
@@ -192,82 +192,6 @@
         errorBox.style.display = 'none';
     }
 
-    function getUsers() {
-        return JSON.parse(localStorage.getItem('users') || '{}');
-    }
-
-    function getUsernameFromEmail(email) {
-        const atIndex = email.indexOf('@');
-        if (atIndex !== -1) {
-            return email.slice(0, atIndex);
-        }
-        return email;
-    }
-
-
-    function saveUser(email, password) {
-        const users = getUsers();
-        users[email] = password;
-        localStorage.setItem('users', JSON.stringify(users));
-        // Базовые настройки таймера
-        const defaultWork = 20; // минут
-        const defaultBreak = 5; // минут
-        let userSettings = { 'email': email, 'password': password, 'username': getUsernameFromEmail(email), 'avatarURL':"pic/user1.jpg",  'workDuration': defaultWork, 'breakDuration': defaultBreak };
-        let userStat = { 'totalWorkMinutes': 0, 'totalBreakMinutes': 0 };
-        let userTimer = { 'isRunning': false, 'isWork': true, 'duration': defaultWork * 60, 'timerStart': Date.now() };
-        localStorage.setItem('userSettings', JSON.stringify(userSettings));
-        localStorage.setItem('userStat', JSON.stringify(userStat));
-        localStorage.setItem('userTimer', JSON.stringify(userTimer));
-        localStorage.setItem("flower", 0);
-
-
-
-    }
-
-    function login() {
-        loginButton.classList.add('active');
-        registerButton.classList.remove('active');
-
-        clearError();
-        const email = document.getElementById('email').value.trim();
-        const password = document.getElementById('password').value;
-
-        const users = getUsers();
-
-        if (!users[email]) {
-            showError('Почта не найдена');
-            return;
-        }
-        if (users[email] !== password) {
-            showError('Неверный пароль');
-            return;
-        }
-        window.location.href = 'garden.html';
-    }
-
-    function register() {
-        registerButton.classList.add('active');
-        loginButton.classList.remove('active');
-
-        clearError();
-        const email = document.getElementById('email').value.trim();
-        const password = document.getElementById('password').value;
-
-        if (!email || !password) {
-            showError('Введите почту и пароль');
-            return;
-        }
-
-        const users = getUsers();
-
-        if (users[email]) {
-            showError('Пользователь уже существует');
-            return;
-        }
-
-        saveUser(email, password);
-        window.location.href = 'garden.html';
-    }
 </script>
 </body>
 

@@ -1,5 +1,5 @@
 package com.walley.walley.services;
-
+/*
 import com.walley.walley.config.MyUserDetails;
 import com.walley.walley.models.MyUser;
 import com.walley.walley.repo.MyUserRepository;
@@ -21,3 +21,4 @@ public class MyUserDetailsService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException(username + "not found"));
     }
 }
+*/

@@ -1,5 +1,5 @@
 package com.walley.walley.config;
-
+/*
 import com.walley.walley.models.MyUser;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -48,3 +48,4 @@ public class MyUserDetails implements UserDetails {
         return true;
     }
 }
+*/

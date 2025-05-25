@@ -15,24 +15,60 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class MainController {
 
     @Autowired
-    //private AppService service;
+    private AppService service;
     private MyUserRepository userRepository;
     //обработка перехода на главную страницу
+    /*
     @GetMapping("/")
     public String greeting( Model model) {
         model.addAttribute("title", "Walley — Вход");
         return "index";
     }
-
+     */
+    @PostMapping("/") // Используйте один адрес для обработки
+    public String handleSubmit(@RequestParam String action,
+                               @RequestParam String email,
+                               @RequestParam String password,
+                               Model model) {
+        if ("register".equals(action)) {
+            if (service.userExists(email)) {
+                model.addAttribute("error", "Пользователь уже существует");
+                return "index"; // Вернуться на страницу с ошибкой
+            }
+            MyUser user = new MyUser(email, password);
+            userRepository.save(user);
+            return "redirect:/"; // Перенаправление после успешной регистрации
+        } else if ("login".equals(action)) {
+            if (!service.validateUser(email, password)) {
+                model.addAttribute("error", "Неверный логин или пароль");
+                return "index"; // Вернуться на страницу с ошибкой
+            }
+            return "redirect:/garden"; // Перенаправление на страницу после входа
+        }
+        return "index"; // На всякий случай
+    }
+    /* старый постмэппинг
     @PostMapping("/")
-    public String addUser(@RequestParam String email, String password, Model model) {
+    public String addUser(@RequestParam String email, @RequestParam String password, Model model) {
         MyUser user = new MyUser(email, password);
-        if (true) {
+        if (service.userExists(email)) {
+            if (!service.validateUser(email, password)) {
+                model.addAttribute("error", "Неверный логин или пароль");
+                return "index"; // Return to the login page with an error
+            }
+            return "redirect:/garden";
+
+        } else {
             userRepository.save(user);
             return "new user is saved";
-        } else {
-            return "redirect:/garden";
         }
     }
+*/
+    @GetMapping("/meow")
+    public String getUser(MyUser user) {
+        return "meow";
+    }
+
+
 
 }
