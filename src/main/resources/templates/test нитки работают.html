@@ -440,17 +440,17 @@
 </head>
 <body>
     <div id="menu">
-        <button data-action="move"><img src="icons/move.svg"></button>
-        <button data-action="hand"><img src="icons/hand.svg"></button>
-        <button data-action="createNote" style="position: relative;"><img src="icons/createNote.svg">
+        <button data-action="move"><img src="../static/icons/move.svg"></button>
+        <button data-action="hand"><img src="../static/icons/hand.svg"></button>
+        <button data-action="createNote" style="position: relative;"><img src="../static/icons/createNote.svg">
             <div id="note-type" class="hidden">
                 <div class="type-option" onclick="textNote()">Заметка</div>
                 <div class="type-option" onclick="listNote()">Список</div>
                 <div class="type-option" onclick="toDoNote()">Лист</div>
             </div>
         </button>
-        <button data-action="thread"><img src="icons/thread.svg"></button>
-        <button data-action="img" style="position: relative;"><img src="icons/img.svg">
+        <button data-action="thread"><img src="../static/icons/thread.svg"></button>
+        <button data-action="img" style="position: relative;"><img src="../static/icons/img.svg">
             <div id="select-image" class="hidden" >Загрузить</div>
             <input type="file" id="image-input" accept="image/*" style="display: none;">
         </button>
@@ -458,7 +458,7 @@
     </div>
     <div id="top-deley">
         <div id="board-settings">
-            <button data-action="boardColor" style="position: relative;"><img src="icons/board-color.svg">
+            <button data-action="boardColor" style="position: relative;"><img src="../static/icons/board-color.svg">
                 <div id="color-palette" class="hidden">
                     <div class="color-option selected" style="background: #FAF8EC;" onclick="selectColor('#FAF8EC', 0)"></div>
                     <div class="color-option" style="background: #FCEEEF;" onclick="selectColor('#FCEEEF', 0)"></div>
@@ -470,7 +470,7 @@
                     <div class="color-option" style="background: #A96360;" onclick="selectColor('#A96360', 1)"></div>
                 </div>
             </button>
-            <button data-action="boardFont" style="position: relative;"><img src="icons/board-font.svg">
+            <button data-action="boardFont" style="position: relative;"><img src="../static/icons/board-font.svg">
                 <div id="font-palette" class="hidden">
                     <div class="font-option selected" style="font-family: 'Montserrat';" onclick="selectFont('Montserrat')">Montserrat</div>
                     <div class="font-option" style="font-family: 'Comfortaa';" onclick="selectFont('Comfortaa')">Comfortaa</div>
@@ -480,8 +480,8 @@
                     <div class="font-option" style="font-family: 'Bad Script';" onclick="selectFont('Bad Script')">Bad Script</div>
                 </div>
             </button>
-            <button data-action="export"><img src="icons/export.svg"></button>
-            <button data-action="share"><img src="icons/share.svg"></button>
+            <button data-action="export"><img src="../static/icons/export.svg"></button>
+            <button data-action="share"><img src="../static/icons/share.svg"></button>
         </div>
         <div id="name-board" contenteditable="true">Новая доска</div>
 

@@ -1,20 +1,20 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
-    <title>Walley — Вход</title>
+    <title>Walley - Cад</title>
     <link
         href="https://fonts.googleapis.com/css2?family=Bad+Script&family=Bitter:ital,wght@0,100..900;1,100..900&family=Comfortaa:wght@300..700&family=Jost:ital,wght@0,100..900;1,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
         rel="stylesheet">
 
-    <link rel="stylesheet" type="text/css" href="styles/garden.css">
+    <link rel="stylesheet" type="text/css" media="all" href="/css/garden.css">
 </head>
 
 <body>
     <div id="buttons-wrap">
-        <button onclick="settings()"><img src="icons/settings.svg"></button>
-        <button><img onclick="folders()" src="icons/folders.svg" style="width: 93%;"></button>
+        <button onclick="settings()" name = "action" value="settings"><img src="/icons/settings.svg"></button>
+        <button value="folders" name = "action"><img onclick="folders()" src="/icons/folders.svg" style="width: 93%;"></button>
     </div>
     <!--
     <div style="position: absolute; width: 100%; top: 0;">
@@ -24,14 +24,14 @@
     <div id="timer">
         <div id="name"> Работа</div>
         <div id="circle">
-            <img id="start-icon" src="icons/start.svg">
-            <img id="stop-icon" src="icons/stop.svg">
+            <img id="start-icon" src="./icons/start.svg">
+            <img id="stop-icon" src="/icons/stop.svg">
         </div>
         <div id="time">00:00 </div>
     </div>
-    <div id="flower"><img src="pic/0.png"></div>
+    <div id="flower"><img src="/pic/0.png"></div>
 
-    <script src="scripts/garden.js"></script>
+    <script src="/scripts/garden.js"></script>
 
 </body>
 

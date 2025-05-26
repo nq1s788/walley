@@ -9,6 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+//import javax.servlet.http.HttpSession;
+
 
 //Контроллер отслеживает все переходы пользователя между страницами
 @Controller
@@ -26,7 +28,7 @@ public class MainController {
 
     @GetMapping("/")
     public String greeting( Model model) {
-        model.addAttribute("title", "проверка гетмэппинга");
+        //model.addAttribute("title", "проверка гетмэппинга");
         return "index";
     }
 
@@ -42,13 +44,14 @@ public class MainController {
             }
             MyUser user = new MyUser(email, password);
             userRepository.save(user);
-            return "redirect:/"; // Перенаправление после успешной регистрации
+
+            return "garden"; // Перенаправление после успешной регистрации
         } else if ("login".equals(action)) {
             if (!service.validateUser(email, password)) {
                 model.addAttribute("error", "Неверный логин или пароль");
                 return "index"; // Вернуться на страницу с ошибкой
             }
-            return "redirect:/garden"; // Перенаправление на страницу после входа
+            return "garden"; // Перенаправление на страницу после входа
         }
         return "index"; // На всякий случай
     }
