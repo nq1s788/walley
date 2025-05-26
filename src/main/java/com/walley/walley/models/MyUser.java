@@ -1,23 +1,22 @@
 package com.walley.walley.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import javax.persistence.*;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Id;
+
+//Класс создаёт табличку с пользователями..
 
 @Entity
 @Table(name = "users")
 public class MyUser {
     @Id
     @Column(name = "email", nullable = false, unique = true)
-    private String email;
+    private String login;
 
     @Column(name = "password", nullable = false)
     private String password;
 
-    public MyUser(String email, String password) {
-        this.email = email;
+    public MyUser(String login, String password) {
+        this.login = login;
         this.password = password;
     }
 
@@ -32,11 +31,11 @@ public class MyUser {
         this.password = password;
     }
 
-    public String getEmail() {
-        return email;
+    public String getLogin() {
+        return login;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setLogin(String login) {
+        this.login = login;
     }
 }
