@@ -5,8 +5,13 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "threads")
 public class Threads {
-    @Column(name = "wallID")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "threadID", nullable = false, unique = true)
     private Long id;
+
+    @Column(name = "wallID")
+    private Long wallId;
 
     @ManyToOne
     @JoinColumn(name = "wallID", referencedColumnName = "wallID", insertable = false, updatable = false)

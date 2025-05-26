@@ -7,8 +7,15 @@ import jakarta.persistence.*;
 public class Notes {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "noteId", nullable = false, unique = true)
+    @Column(name = "noteID", nullable = false, unique = true)
     private Long id;
+
+    @Column(name = "wallID")
+    private Long wallId;
+
+    @ManyToOne
+    @JoinColumn(name = "wallID", referencedColumnName = "wallID", insertable = false, updatable = false)
+    private Walls wall;
 
     @Column(name = "class")
     private String NoteClass;
