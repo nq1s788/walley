@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Walley — Вход</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bad+Script&family=Bitter:ital,wght@0,100..900;1,100..900&family=Comfortaa:wght@300..700&family=Jost:ital,wght@0,100..900;1,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="styles/settings.css">
+
+</head>
+
+<body>
+    <div id="buttons-wrap">
+        <button onclick="garden()"><img src="icons/garden.svg"></button>
+    </div>
+    <!--
+    <div style="position: absolute; width: 100%; top: 0;">
+        <img src="Group3.png" style="opacity: 0.5; width: 1536px;">
+    </div>-->
+    <div id="opacity-back">
+        <label id="page-name">Настройки</label>
+        <div id="container">
+            <div id="acc-settings">
+                <div class="wrap">
+                    <label class="block-name">Аккаунт</label>
+
+                    <div id="avatar">
+                        <input type="file" id="image-input" accept="image/*" style="display: none;">
+                    </div>
+                    <div id="username" contenteditable="true" spellcheck="false"></div>
+                    <div class="form-row">
+                        <label for="email">Почта</label>
+                        <input type="email" id="email" required disabled>
+                    </div>
+                    <div class="form-row">
+                        <label for="password">Пароль</label>
+                        <input type="password" id="password" required>
+                    </div>
+                </div>
+            </div>
+            <div id="time-settings">
+                <div class="wrap">
+                    <label class="block-name">Таймер</label>
+
+                    <div class="row">
+                        <label>Время работы</label>
+                        <input id='workInput' required type="number" min="1" max="60" value="20">
+                        <label>мин.</label>
+
+                    </div>
+                    <div class="row">
+                        <label>Время отдыха</label>
+                        <input id='restInput' required type="number" min="1" max="60" value="5">
+                        <label>мин.</label>
+                    </div>
+
+                </div>
+                <div class="wrap">
+                    <label class="block-name">Статистика</label>
+
+                    <div class="row">
+                        <label>Время работы</label>
+                        <label id="totalWorkMinutes"></label>
+
+                    </div>
+                    <div class="row">
+                        <label>Время отдыха</label>
+                        <label id="totalBreakMinutes"></label>
+
+
+                    </div>
+
+                </div>
+                <div id="buttons">
+
+
+                    <button>Сохранить</button>
+                    <button>Сбросить прогресс</button>
+                    <div id="message">lalala</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="scripts/settings.js"></script>
+</body>
+
+</html>

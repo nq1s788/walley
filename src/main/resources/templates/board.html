@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Онлайн доска</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bad+Script&family=Bitter:ital,wght@0,100..900;1,100..900&family=Comfortaa:wght@300..700&family=Jost:ital,wght@0,100..900;1,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="styles/board.css">
+</head>
+
+<body>
+    <div id="menu">
+
+        <div id="top-menu">
+            <button data-action="move"><img src="icons/move.svg"></button>
+            <button data-action="hand"><img src="icons/hand.svg"></button>
+            <button data-action="createNote" style="position: relative;"><img src="icons/createNote.svg">
+                <div id="note-type" class="hidden">
+                    <div class="type-option" onclick="textNote()">Заметка</div>
+                    <div class="type-option" onclick="listNote()">Список</div>
+                    <div class="type-option" onclick="toDoNote()">Лист</div>
+                </div>
+            </button>
+            <button data-action="thread"><img src="icons/thread.svg"></button>
+            <button data-action="img" style="position: relative;"><img src="icons/img.svg">
+                <div id="select-image" class="hidden">Загрузить</div>
+                <input type="file" id="image-input" accept="image/*" style="display: none;">
+            </button>
+        </div>
+        <div id="bottom-menu">
+            <button><img src="icons/ctrlz.svg"></button>
+            <button><img src="icons/ctrly.svg"></button>
+        </div>
+
+    </div>
+    <div id="timer">
+        <div id="name"> Работа</div>
+        <div id="time">00:00 </div>
+    </div>
+    <div id="top-deley">
+        <div id="board-settings">
+            <button data-action="boardColor" style="position: relative;"><img src="icons/board-color.svg">
+                <div id="color-palette" class="hidden">
+                    <div class="color-option selected" style="background: #FAF8EC;" onclick="selectColor('#FAF8EC', 0)">
+                    </div>
+                    <div class="color-option" style="background: #FCEEEF;" onclick="selectColor('#FCEEEF', 0)"></div>
+                    <div class="color-option" style="background: #EDF1E0;" onclick="selectColor('#EDF1E0', 0)"></div>
+                    <div class="color-option" style="background: #EAF2F8;" onclick="selectColor('#EAF2F8', 0)"></div>
+                    <div class="color-option" style="background: #AAC4CE;" onclick="selectColor('#AAC4CE', 1)"></div>
+                    <div class="color-option" style="background: #868B6A;" onclick="selectColor('#868B6A', 1)"></div>
+                    <div class="color-option" style="background: #A88A9E;" onclick="selectColor('#A88A9E', 1)"></div>
+                    <div class="color-option" style="background: #A96360;" onclick="selectColor('#A96360', 1)"></div>
+                </div>
+            </button>
+            <button data-action="boardFont" style="position: relative;"><img src="icons/board-font.svg">
+                <div id="font-palette" class="hidden">
+                    <div class="font-option selected" style="font-family: 'Montserrat';"
+                        onclick="selectFont('Montserrat')">Montserrat</div>
+                    <div class="font-option" style="font-family: 'Comfortaa';" onclick="selectFont('Comfortaa')">
+                        Comfortaa</div>
+                    <div class="font-option" style="font-family: 'Jost';" onclick="selectFont('Jost')">Jost</div>
+                    <div class="font-option" style="font-family: 'Bitter';" onclick="selectFont('Bitter')">Bitter</div>
+                    <div class="font-option" style="font-family: 'Caveat';" onclick="selectFont('Caveat')">Caveat</div>
+                    <div class="font-option" style="font-family: 'Bad Script';" onclick="selectFont('Bad Script')">Bad
+                        Script</div>
+                </div>
+            </button>
+            <button data-action="export"><img src="icons/export.svg"></button>
+            <button data-action="share"><img src="icons/share.svg"></button>
+        </div>
+        <div id="name-board" contenteditable="true">Новая доска</div>
+        <div id="out-settings">
+            <button onclick="garden()"><img src="icons/garden.svg"></button>
+            <button><img onclick="folders()" src="icons/folders.svg" style="width: 93%;"></button>
+
+        </div>
+
+    </div>
+
+    <div id="board-container">
+        <div id="board">
+            <canvas id="linesCanvas"></canvas>
+        </div>
+    </div>
+    <script src="scripts/board.js"></script>
+</body>
+
+</html>

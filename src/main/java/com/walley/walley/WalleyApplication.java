@@ -14,5 +14,4 @@ public class WalleyApplication {
 		///пожалуйста
 		SpringApplication.run(WalleyApplication.class, args);
 	}
-
 }
