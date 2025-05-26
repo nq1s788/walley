@@ -22,7 +22,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'javax.servlet:javax.servlet-api:4.0.1'
+	implementation 'jakarta.servlet:jakarta.servlet-api:5.0.0'
 	implementation 'org.postgresql:postgresql:42.7.3'
 
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
