@@ -5,6 +5,9 @@ import com.walley.walley.models.UserSetting;
 import com.walley.walley.models.UserStat;
 import com.walley.walley.models.UserTimer;
 import com.walley.walley.repo.MyUserRepository;
+import com.walley.walley.repo.UserSettingRepository;
+import com.walley.walley.repo.UserStatRepository;
+import com.walley.walley.repo.UserTimerRepository;
 import com.walley.walley.services.AppService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,10 +26,17 @@ public class MainController {
     @Autowired
     private AppService service;
     private final MyUserRepository userRepository;
+    private final UserSettingRepository userSettingRepository;
+    private final UserStatRepository userStatRepository;
+    private final UserTimerRepository userTimerRepository;
 
     @Autowired
-    public MainController(MyUserRepository userRepository) {
+    public MainController(MyUserRepository userRepository, UserSettingRepository userSettingRepository,
+                          UserStatRepository userStatRepository, UserTimerRepository userTimerRepository) {
         this.userRepository = userRepository;
+        this.userSettingRepository = userSettingRepository;
+        this.userStatRepository = userStatRepository;
+        this.userTimerRepository = userTimerRepository;
     }
     //обработка перехода на главную страницу
 
@@ -51,12 +61,14 @@ public class MainController {
             UserSetting userSetting = new UserSetting(email);
             UserStat userStat = new UserStat(email);
             UserTimer userTimer = new UserTimer(email);
-            //сохраняем всех по репозиториям
             userRepository.save(user);
+            userSettingRepository.save(userSetting);
+            userStatRepository.save(userStat);
+            userTimerRepository.save(userTimer);
             session.setAttribute("user", user);
-            session.setAttribute("user", userSetting);
-            session.setAttribute("user", userStat);
-            session.setAttribute("user", userTimer);
+            session.setAttribute("userSetting", userSetting);
+            session.setAttribute("userStat", userStat);
+            session.setAttribute("userTimer", userTimer);
 
             return "garden"; // Перенаправление после успешной регистрации
         } else if ("login".equals(action)) {
@@ -65,6 +77,9 @@ public class MainController {
                 return "index"; // Вернуться на страницу с ошибкой
             }
             session.setAttribute("user", userRepository.findByEmail(email));
+            session.setAttribute("userSetting", userSettingRepository.findByEmail(email));
+            session.setAttribute("userStat", userStatRepository.findByEmail(email));
+            session.setAttribute("userTimer", userTimerRepository.findByEmail(email));
             return "garden"; // Перенаправление на страницу после входа
         }
         return "index"; // На всякий случай
