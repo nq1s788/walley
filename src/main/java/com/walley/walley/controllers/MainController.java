@@ -70,7 +70,7 @@ public class MainController {
             session.setAttribute("userStat", userStat);
             session.setAttribute("userTimer", userTimer);
 
-            return "garden"; // Перенаправление после успешной регистрации
+            return "redirect:/garden"; // Перенаправление после успешной регистрации
         } else if ("login".equals(action)) {
             if (!service.validateUser(email, password)) {
                 model.addAttribute("error", "Неверный логин или пароль");
@@ -80,32 +80,8 @@ public class MainController {
             session.setAttribute("userSetting", userSettingRepository.findByEmail(email));
             session.setAttribute("userStat", userStatRepository.findByEmail(email));
             session.setAttribute("userTimer", userTimerRepository.findByEmail(email));
-            return "garden"; // Перенаправление на страницу после входа
+            return "redirect:/garden"; // Перенаправление на страницу после входа
         }
         return "index"; // На всякий случай
     }
-    /* старый постмэппинг
-    @PostMapping("/")
-    public String addUser(@RequestParam String email, @RequestParam String password, Model model) {
-        MyUser user = new MyUser(email, password);
-        if (service.userExists(email)) {
-            if (!service.validateUser(email, password)) {
-                model.addAttribute("error", "Неверный логин или пароль");
-                return "index"; // Return to the login page with an error
-            }
-            return "redirect:/garden";
-
-        } else {
-            userRepository.save(user);
-            return "new user is saved";
-        }
-    }
-*/
-    /*@GetMapping("/meow")
-    public String getUser(MyUser user) {
-        return "meow";
-    }*/
-
-
-
 }
