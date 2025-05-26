@@ -10,16 +10,21 @@ public class UserSetting {
     @Id
     @Column(name = "email", nullable = false, unique = true)
     private String email;
+
     @OneToOne
     @MapsId
     @JoinColumn(name = "email")
+    private MyUser user;
 
     @Column(name = "username", nullable = false)
     private String username;
+
     @Column(name = "avatarURL", nullable = false)
     private String avatarUrl;
+
     @Column(name = "workDuration", nullable = false)
     private Duration workDuration = Duration.ofSeconds(20);
+
     @Column(name = "breakDuration", nullable = false)
     private Duration breakDuration = Duration.ofSeconds(5);
 
@@ -28,7 +33,7 @@ public class UserSetting {
 
     public UserSetting(String email) {
         this.email = email;
-        this.username = email;
+        this.username = email; // Предполагается, что username равен email
     }
 
     public String getEmail() {

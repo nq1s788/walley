@@ -14,6 +14,7 @@ public class UserTimer {
     @OneToOne
     @MapsId
     @JoinColumn(name = "email")
+    private MyUser user;
 
     @Column(name = "isRunning")
     private boolean isRunnig = false;

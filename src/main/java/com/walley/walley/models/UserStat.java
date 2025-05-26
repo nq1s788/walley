@@ -11,6 +11,7 @@ public class UserStat {
     @OneToOne
     @MapsId
     @JoinColumn(name = "email")
+    private MyUser user;
 
     @Column(name = "totalWorkMinutes", nullable = false)
     private long totalWorkMinutes = 0;
