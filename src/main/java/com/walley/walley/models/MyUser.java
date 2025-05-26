@@ -9,20 +9,15 @@ import javax.persistence.*;
 @Table(name = "users")
 public class MyUser {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long  id;
-    private String login, password;
+    private String email;
+    private String password;
 
-    public MyUser(String login, String password) {
-        this.login = login;
+    public MyUser(String email, String password) {
+        this.email = email;
         this.password = password;
     }
 
     public MyUser() {
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public String getPassword() {
@@ -33,15 +28,11 @@ public class MyUser {
         this.password = password;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public String getEmail() {
+        return email;
     }
 
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

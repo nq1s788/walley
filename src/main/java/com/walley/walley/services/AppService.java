@@ -13,11 +13,16 @@ public class AppService {
     public AppService(MyUserRepository repository) {
         this.repository = repository;
     }
-    public AppService() {
-    }
-    @PostConstruct
+    //public AppService() {}
+
     public void addUser(MyUser user) {
         repository.save(user);
+    }
+
+    @PostConstruct
+    public void init() {
+        MyUser user = new MyUser(); // or load from config, etc.
+        addUser(user);
     }
 
     public boolean userExists(String email) {
