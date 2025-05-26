@@ -21,7 +21,7 @@ public class AppService {
 
     @PostConstruct
     public void init() {
-        MyUser user = new MyUser(); // or load from config, etc.
+        MyUser user = new MyUser("example@example.com", "securepassword");
         addUser(user);
     }
 

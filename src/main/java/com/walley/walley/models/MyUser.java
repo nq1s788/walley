@@ -1,9 +1,8 @@
 package com.walley.walley.models;
 
-import javax.persistence.*;
-
-
-//Класс создаёт табличку с пользователями..
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "users")
