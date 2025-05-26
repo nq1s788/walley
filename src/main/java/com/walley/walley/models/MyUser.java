@@ -1,14 +1,19 @@
 package com.walley.walley.models;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Id;
 
 @Entity
 @Table(name = "users")
 public class MyUser {
     @Id
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
+
+    @Column(name = "password", nullable = false)
     private String password;
 
     public MyUser(String email, String password) {
