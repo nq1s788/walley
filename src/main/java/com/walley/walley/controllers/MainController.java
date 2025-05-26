@@ -16,15 +16,20 @@ public class MainController {
 
     @Autowired
     private AppService service;
-    private MyUserRepository userRepository;
+    private final MyUserRepository userRepository;
+
+    @Autowired
+    public MainController(MyUserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
     //обработка перехода на главную страницу
-    /*
+
     @GetMapping("/")
     public String greeting( Model model) {
-        model.addAttribute("title", "Walley — Вход");
+        model.addAttribute("title", "проверка гетмэппинга");
         return "index";
     }
-     */
+
     @PostMapping("/") // Используйте один адрес для обработки
     public String handleSubmit(@RequestParam String action,
                                @RequestParam String email,

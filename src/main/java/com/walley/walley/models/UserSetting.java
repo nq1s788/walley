@@ -1,6 +1,7 @@
 package com.walley.walley.models;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+
 import java.time.Duration;
 
 @Entity
