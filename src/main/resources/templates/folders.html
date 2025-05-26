@@ -8,18 +8,18 @@
         href="https://fonts.googleapis.com/css2?family=Bad+Script&family=Bitter:ital,wght@0,100..900;1,100..900&family=Comfortaa:wght@300..700&family=Jost:ital,wght@0,100..900;1,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
         rel="stylesheet">
 
-    <link rel="stylesheet" type="text/css" href="../static/css/folders.css">
+    <link rel="stylesheet" type="text/css" href="/css/folders.css">
 
 </head>
 
 <body>
     <div id="buttons-wrap">
-        <button onclick="garden()"><img src="../static/icons/garden.svg"></button>
+        <button onclick="garden()" name="action" value="garden"><img src="/icons/garden.svg"></button>
     </div>
     <div id="opacity-back">
         <div id="container">
             <div id="search-wrap">
-                <img src="../static/icons/search.svg">
+                <img src="icons/search.svg">
                 <input type="text" placeholder="Поиск..." class="search-bar">
 
             </div>
@@ -28,9 +28,9 @@
                 <table class="board-table">
                     <thead>
                         <tr>
-                            <th>Название<img onclick="sortBy('title')" src="../static/icons/sort.svg"></th>
-                            <th>Владелец<img onclick="sortBy('user')" src="../static/icons/sort.svg"></th>
-                            <th>Последнее изменение<img onclick="sortBy('date')" src="../static/icons/sort.svg"></th>
+                            <th>Название<img onclick="sortBy('title')" src="icons/sort.svg"></th>
+                            <th>Владелец<img onclick="sortBy('user')" src="icons/sort.svg"></th>
+                            <th>Последнее изменение<img onclick="sortBy('date')" src="/icons/sort.svg"></th>
                             <th></th>
 
                         </tr>
@@ -41,12 +41,12 @@
                 </table>
             </div>
             <div class="add-button-wrapper">
-                <button class="add-button"><img src="../static/icons/add-board.svg"></button>
+                <button class="add-button"><img src="icons/add-board.svg"></button>
             </div>
         </div>
     </div>
 
-    <script src="../static/scripts/folders.js"></script>
+    <script src="scripts/folders.js"></script>
 
 </body>
 
