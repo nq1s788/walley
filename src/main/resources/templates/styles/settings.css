@@ -1,0 +1,208 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    font-family: 'Jost';
+    font-size: 20px;
+    background-image: url('../background/logwithoutlogo.png');
+    background-size: cover;
+
+    background-position: bottom center;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(10px);
+}
+
+#opacity-back {
+    height: calc(100% - 30px);
+    width: calc(100% - 255px);
+    background-color: #FBFFEDA0;
+    border-radius: 10px;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    position: relative;
+}
+
+#page-name {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 48px;
+    top: 0
+}
+
+#message {
+    display: none;
+    position: absolute;
+    left: 50%;
+    bottom: 53px;
+    transform: translateX(-50%);
+    font-size: 20px;
+    padding: 0px 15px;
+    z-index: 1000;
+    background: #FBFFED;
+    border-radius: 12px;
+    border: 3.5px solid #C1837B;
+}
+
+#container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    width: 100%;
+}
+
+#acc-settings {
+    width: 41%;
+}
+
+#time-settings {
+    width: 41%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+#avatar {
+    width: 200px;
+    height: 200px;
+    border-radius: 100%;
+    border: 3.5px solid #C1837B;
+    /*background-image: url('pic/user1.jpg');*/
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    margin: auto;
+    cursor: pointer;
+}
+
+#username {
+    outline: none;
+    margin: 10px 10px;
+    text-decoration: none;
+}
+
+.wrap {
+    padding: 10px 20px;
+    background-color: #FBFFED;
+    border: 3.5px solid #C1837B;
+    border-radius: 12px;
+    position: relative;
+}
+
+.block-name {
+    position: absolute;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.form-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 9px;
+    justify-content: space-between;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    justify-content: center;
+    margin-bottom: 9px;
+}
+
+.row:last-child {
+    margin-bottom: 0;
+}
+
+input[type="email"],
+input[type="password"] {
+    font-family: 'Jost';
+    font-size: 20px;
+    width: calc(100% - 113px);
+    border: 2.4px solid #4f4242;
+    border-radius: 2.4px;
+    background: #FBFFED !important;
+    outline: none;
+    height: 30px;
+}
+
+input:-webkit-autofill {
+    box-shadow: 0 0 0px 1000px #FBFFED inset;
+    /* замещает фон */
+}
+
+input[type="number"] {
+    font-family: 'Jost';
+    font-size: 20px;
+    border: 2.4px solid #4f4242;
+    border-radius: 2.4px;
+    background: #FBFFED !important;
+    outline: none;
+    accent-color: #C1837B;
+}
+
+#buttons {
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    position: relative;
+}
+
+button {
+    border-radius: 12px;
+    cursor: pointer;
+    background: #FBFFED;
+    border: 3.5px solid #C1837B;
+    color: #4b3832;
+    width: 50%;
+    height: 40px;
+    font-family: 'Jost';
+
+    font-size: 20px;
+    /*transition: background 0.2s;*/
+}
+
+
+button:hover {
+    background: #EEF3D5;
+}
+
+#buttons-wrap {
+    position: absolute;
+    top: 14px;
+    left: 25px;
+    display: flex;
+    gap: 13px;
+}
+
+#buttons-wrap img {
+    width: 100%;
+}
+
+#buttons-wrap button {
+    width: 77px;
+    height: 77px;
+    cursor: pointer;
+    border: 4px solid #C1837B;
+    background: #FBFFED;
+    border-radius: 14px;
+    padding: 6px;
+    margin: 0;
+}
+
+#buttons-wrap button:hover {
+    background: #EEF3D5;
+}

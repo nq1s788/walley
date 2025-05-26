@@ -1,0 +1,468 @@
+body {
+    margin: 0;
+    overflow: hidden;
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    font-family: 'Montserrat';
+    line-height: 1.2;
+    color: #4F4242;
+}
+
+#menu {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 25px;
+    z-index: 99999;
+    gap: 10px;
+    display: flex;
+    flex-direction: column;
+}
+#top-menu, #bottom-menu{
+    display: flex;
+    flex-direction: column;
+}
+
+button {
+    width: 77px;
+    height: 77px;
+    cursor: pointer;
+    border: 4px solid #C1837B;
+    background: #FBFFED;
+    border-radius: 14px;
+}
+
+button:hover,
+.active-tool {
+    background: #EEF3D5 !important;
+}
+
+#menu button {
+    height: 72px;
+    border-radius: 0;
+    border-bottom: none;
+}
+
+#menu button:first-child {
+    border-top-left-radius: 14px;
+    border-top-right-radius: 14px;
+}
+
+#menu button:last-child {
+    height: 76px;
+    border-bottom-left-radius: 14px;
+    border-bottom-right-radius: 14px;
+    border-bottom: 4px solid #C1837B;
+}
+
+#menu img {
+    height: 53px;
+    width: 53px;
+}
+#timer{
+    border-radius: 14px;
+    border: 4px solid #C1837B;
+    background: #FBFFED;
+    position: absolute;
+    left: 25px;
+    z-index: 99999;
+    display: flex;
+    flex-direction: column;
+    bottom: 14px;
+    align-items: center;
+    justify-content: center;
+    height: 69px;
+    width: 159px;
+    font-size: 25px;
+}
+#top-deley {
+    position: absolute;
+    top: 14px;
+    width: 100%;
+    height: 76px;
+}
+
+#board-settings {
+    position: absolute;
+    right: 30px;
+    display: flex;
+    flex-direction: row;
+    z-index: 99999;
+}
+
+#board-settings button {
+    width: 72px;
+    border-radius: 0;
+    border-right: none;
+}
+
+#board-settings button:first-child {
+    border-top-left-radius: 14px;
+    border-bottom-left-radius: 14px;
+}
+
+#board-settings button:last-child {
+    width: 76px;
+    border-top-right-radius: 14px;
+    border-bottom-right-radius: 14px;
+    border-right: 4px solid #C1837B;
+}
+
+#board-settings img {
+    height: 53px;
+    width: 53px;
+}
+
+#name-board {
+    position: absolute;
+    z-index: 1;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    outline: none;
+    max-width: 40%;
+    overflow: hidden;
+}
+
+#out-settings {
+    position: absolute;
+    left: 25px;
+    z-index: 999;
+    gap: 13px;
+    display: flex;
+}
+#out-settings button{
+    padding: 6px;
+}
+#out-settings button:nth-child(1) img{
+    width: 100%;
+}
+
+#out-settings button:nth-child(2) img{
+    width: 93%;
+}
+
+#color-palette,
+.note-color-palette {
+    position: absolute;
+    z-index: 9999;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 7px;
+    background: #FBFFED;
+    padding: 7px;
+    margin-top: 11px;
+    border-radius: 10px;
+    border: 3px solid #C1837B;
+}
+
+.note-color-palette {
+    top: -125%;
+    margin-top: 0;
+}
+
+img.off {
+    opacity: 0.5;
+}
+
+.color-option {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 3px solid transparent;
+}
+
+.color-option.selected {
+    border: 3px solid #C1837B;
+}
+
+#font-palette {
+    position: absolute;
+    z-index: 9999;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #FBFFED;
+    padding: 0;
+    margin-top: 11px;
+    border-radius: 10px;
+    border: 3px solid #C1837B;
+}
+
+.font-option {
+    cursor: pointer;
+    padding: 3px 7px;
+    font-size: 24px;
+    border-bottom: 3px solid #C1837B;
+    display: flex;
+    justify-content: center;
+    line-height: 1.2;
+}
+
+.font-option:last-child {
+    border-bottom: none;
+}
+
+.font-option.selected {
+    background-color: #EEF3D5;
+}
+
+.font-option:first-child.selected {
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.font-option:last-child.selected {
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+#note-type,
+#select-image {
+    position: absolute;
+    z-index: 9999;
+    top: 50%;
+    left: 100%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    padding: 0;
+}
+
+#select-image {
+    background: #FBFFED;
+    padding: 3px 13px;
+    margin-left: 11px;
+    border-radius: 10px;
+    border: 3px solid #C1837B;
+}
+
+#select-image:hover {
+    background: #EEF3D5;
+}
+
+.type-option {
+    background: #FBFFED;
+    padding: 3px 13px;
+    margin: 7px 11px;
+    border-radius: 10px;
+    border: 3px solid #C1837B;
+}
+
+.type-option:hover {
+    background: #EEF3D5;
+}
+
+.hidden {
+    display: none !important;
+}
+
+#board-container {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+    background: #FAF8EC;
+}
+
+#board {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    transform-origin: 0 0;
+}
+
+canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+/* Note styles */
+
+.note {
+    z-index: 2;
+    position: absolute;
+    width: 264px;
+    min-height: 264px;
+    background: #F5CBA7;
+    padding: 0;
+    cursor: grab;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    font-size: 20px;
+    overflow-wrap: break-word;
+    border: none;
+}
+
+.note-focused {
+    outline: 4px solid #C1837B;
+}
+
+.note-content {
+    display: grid;
+    gap: 10px;
+    margin: 5px;
+}
+
+.note-block {
+    max-width: 248px;
+    overflow-wrap: break-word;
+}
+
+.note-block:focus,
+.note-block-focused {
+    outline: none !important;
+    border: 2px dashed #C1837B !important;
+}
+
+span {
+    width: 100%;
+}
+
+span:focus {
+    outline: none !important;
+}
+
+.note-title,
+.note-time,
+.note-main,
+.note-num-item,
+.note-checkbox-item {
+    white-space: pre-wrap;
+    border: 2px dashed transparent;
+    cursor: text;
+    padding: 1px;
+}
+
+.note-title {
+    font-weight: 500;
+    text-align: center;
+    font-size: 22px;
+}
+
+.note-main {
+    text-align: center;
+}
+
+.note-time {
+    text-align: right;
+    font-size: 14px;
+    width: max-content;
+    justify-self: right;
+}
+
+.listNote .note-list-items {
+    list-style: decimal inside;
+    padding: 0;
+    margin: 0;
+}
+
+.toDoNote .note-list-items {
+    list-style: none;
+    margin: 0 0 0 35px;
+    padding: 0;
+}
+
+.note-num-item,
+.note-checkbox-item {
+    margin-bottom: 5px;
+}
+
+.note-checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+}
+
+.note-checkbox-item.checked span {
+    text-decoration: line-through;
+    color: #4f4242c1;
+}
+
+.add-item {
+    text-align: center;
+    cursor: pointer;
+    font-size: 24px;
+    color: #C1837B;
+    user-select: none;
+    width: 10%;
+    justify-self: center;
+    margin-top: -20px;
+}
+
+.checkbox {
+    width: 24px;
+    height: 24px;
+    opacity: 0;
+    position: absolute;
+    z-index: 2;
+    cursor: pointer;
+    left: -37px;
+    top: 0;
+}
+
+.checkbox+.checkbox-title::before {
+    content: "";
+    position: absolute;
+    left: -37px;
+    top: -2.3px;
+    width: 24px;
+    height: 24px;
+    border: 3px solid #C1837B;
+    border-radius: 2px;
+    pointer-events: none;
+}
+
+.checkbox:checked+.checkbox-title::after {
+    content: "";
+    position: absolute;
+    left: -32.2px;
+    top: 3px;
+    width: 18px;
+    height: 18px;
+    background-image: url('../icons/checkbox.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    pointer-events: none;
+}
+
+.checkbox-title {
+    display: inline-block;
+    max-width: 200px;
+    position: relative;
+    padding-left: 0;
+}
+
+.note-settings {
+    position: absolute;
+    left: 50%;
+    bottom: 107%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: row;
+    z-index: 9999;
+}
+
+.note-settings button {
+    height: 64px;
+    width: 60px;
+    border-radius: 0;
+    border-right: none;
+}
+
+.note-settings button:first-child {
+    border-top-left-radius: 14px;
+    border-bottom-left-radius: 14px;
+}
+
+.note-settings button:last-child {
+    width: 64px;
+    border-top-right-radius: 14px;
+    border-bottom-right-radius: 14px;
+    border-right: 4px solid #C1837B;
+}
