@@ -69,7 +69,6 @@ public class MainController {
             session.setAttribute("userSetting", userSetting);
             session.setAttribute("userStat", userStat);
             session.setAttribute("userTimer", userTimer);
-
             return "redirect:/garden"; // Перенаправление после успешной регистрации
         } else if ("login".equals(action)) {
             if (!service.validateUser(email, password)) {
