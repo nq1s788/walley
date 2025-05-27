@@ -14,14 +14,16 @@
 <body>
 <form action="/garden" method="post">
     <div id="buttons-wrap">
-        <button onclick="settings()" name = "action" value="settings"><img src="/icons/settings.svg"></button>
-        <button value="folders" name = "action"><img onclick="folders()" src="/icons/folders.svg" style="width: 93%;"></button>
+        <button type="submit" onclick="settings()" name = "action" value="settings"><img src="/icons/settings.svg"></button>
+        <button type="submit" value="folders" name = "action"><img onclick="folders()" src="/icons/folders.svg" style="width: 93%;"></button>
     </div>
     <!--
     <div style="position: absolute; width: 100%; top: 0;">
         <img src="Group2.png" style="opacity: 0.5; width: 1536px;">
     </div>
 -->
+</form>
+    <form action="/garden" method="get">
     <div id="timer">
         <div id="name"> Работа</div>
         <div id="circle">
