@@ -14,10 +14,10 @@
 
 <body>
 <form action="/folders" method="post">
-    <div id="buttons-wrap">
-        <button type="submit" onclick="garden()" name="action" value="garden"><img src="/icons/garden.svg"></button>
-    </div>
-    </form>
+    <button type="submit" name="action" value="garden">
+        <img src="/icons/garden.svg">
+    </button>
+</form>
 <form action="/folders" method="get">
     <div id="opacity-back">
         <div id="container">
@@ -49,14 +49,10 @@
         </div>
     </div>
 </form>
-    <script>
-        function garden() {
-            window.location.href = 'garden.html';
-        }
+    <script src="/scripts/garden.js" th:inline="javascript">
 
-        let boards = /*[[${boards}]]*/;
-
-        const userSettings = /*[[${userSetting}]]*/ {};
+        let boards = [[${boards}]];
+        const userSettings = [[${userSetting}]];
 
     </script>
 
