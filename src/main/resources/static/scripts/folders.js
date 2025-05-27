@@ -4,14 +4,6 @@ function garden() {
 }
 
 // тут надо загрузить доски пользователя, поля:
-let boards = [
-    { title: "Доска 4", user: "azalkinmmm", date: "20.03.25", time: "20:01" },
-    { title: "Доска 1", user: "anya_mrkv3", date: "16.03.25", time: "10:15" },
-    { title: "Доска 2", user: "nq1s788", date: "16.03.25", time: "14:20" },
-    { title: "Доска 3", user: "kristina_legaevа", date: "17.03.25", time: "12:23" },
-];
-
-const userSettings = JSON.parse(localStorage.getItem("userSettings"));
 
 let sortField = null;
 let sortAsc = true;
