@@ -13,6 +13,7 @@
 </head>
 
 <body>
+<form action="/folders" method="post">
     <div id="buttons-wrap">
         <button onclick="garden()" name="action" value="garden"><img src="/icons/garden.svg"></button>
     </div>
@@ -45,13 +46,13 @@
             </div>
         </div>
     </div>
-
-    <script src="scripts/folders.js">
+</form>
+    <script>
         function garden() {
             window.location.href = 'garden.html';
         }
 
-        let boards = /*[[${boards}]]*/ [];
+        let boards = /*[[${boards}]]*/;
 
         const userSettings = /*[[${userSetting}]]*/ {};
 

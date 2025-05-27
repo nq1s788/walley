@@ -1,5 +1,7 @@
 package com.walley.walley.controllers;
 
+import com.walley.walley.models.UserSetting;
+import com.walley.walley.models.UserTimer;
 import com.walley.walley.repo.MyUserRepository;
 import com.walley.walley.repo.UserSettingRepository;
 import com.walley.walley.repo.UserStatRepository;
@@ -41,6 +43,13 @@ public class GardenController {
         session.setAttribute("userSetting", session.getAttribute("userSetting"));
         session.setAttribute("userStat", session.getAttribute("userStat"));
         session.setAttribute("userTimer", session.getAttribute("userTimer"));
+
+
+
+        //model.addAttribute("workDuration", session.getAttribute("userSetting").getWorkDuration());
+        //model.addAttribute("breakDuration", userSetting.getBreakDuration());
+        //model.addAttribute("isWork", userTimer.isWork());
+        //model.addAttribute("isRunning", userTimer.isRunning());
         return "garden";
     }
     @PostMapping("/garden")

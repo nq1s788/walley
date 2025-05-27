@@ -12,6 +12,7 @@
 </head>
 
 <body>
+<form action="/garden" method="post">
     <div id="buttons-wrap">
         <button onclick="settings()" name = "action" value="settings"><img src="/icons/settings.svg"></button>
         <button value="folders" name = "action"><img onclick="folders()" src="/icons/folders.svg" style="width: 93%;"></button>
@@ -30,8 +31,13 @@
         <div id="time">00:00 </div>
     </div>
     <div id="flower"><img src="/pic/0.png"></div>
-
-    <script src="/scripts/garden.js"></script>
+</form>
+    <script src="/scripts/garden.js">
+        let isWork = true;
+        let timeLeft = WORK_DURATION;
+        let timerInterval = null;
+        let isRunning = false;
+    </script>
 
 </body>
 
