@@ -33,6 +33,7 @@
             <div class="table-wrapper">
                 <table class="board-table">
                     <thead>
+
                         <tr>
                             <th>Название<img onclick="sortBy('title')" src="icons/sort.svg"></th>
                             <th>Владелец<img onclick="sortBy('user')" src="icons/sort.svg"></th>
@@ -40,12 +41,13 @@
                             <th></th>
 
                         </tr>
+
                     </thead>
                     <tbody id="table-body">
                     <form action="/folders" method="get">
-                    <tr th:each="wall : ${boards}">
+                    <tr th:each="wall : ${boards}" data-id="${wall.id}" onclick="toBoard(event)">
                         <td th:text="${wall.title}">Название</td>
-                        <td th:text="${wall.email}">Владелец</td>
+                        <td th:text="${wall.user}">Владелец</td>
                         <td th:text="${#dates.format(wall.createdAt, 'dd.MM.yyyy HH:mm')}">Дата</td>
                         <td>
                             <img src="/icons/more.svg" class="more-icon" style="cursor:pointer;">
@@ -62,11 +64,44 @@
 
     </div>
 <script>
+    function toBoard(e) {
+        const target = e.target;
+
+        if (
+            target.closest(".more-button") ||
+            target.closest(".more-buttons") ||
+            (target.tagName === "TD" && target.hasAttribute("contenteditable"))
+        ) {
+            return;
+        }
+
+        const row = target.closest("tr");
+        if (!row) return;
+
+        const name = row.querySelector("td")?.textContent.trim() || "";
+        //тут надо передать всю инфу по доске, пока передается тотлько имя
+        const boardInf = { name };
+
+        const params = new URLSearchParams();
+        params.append('title', name);
+        params.append('action', 'toBoard');
+
+        fetch('/folders', {
+            method: 'POST',
+            body: params
+        })
+    }
+
+
 
     // тут надо загрузить доски пользователя, поля:
 
-    let boards = [[${boards}]];
-    const userSetting = [[${userSetting}]];
+    let boards = /*[[${boards}]]*/ [];
+    const userSetting = /*[[${userSetting}]]*/ {}
+
+
+    console.log(boards); // Проверка данных
+    console.log(userSetting); // Проверка настроек пользователя
 
     let sortField = null;
     let sortAsc = true;
@@ -96,7 +131,7 @@
             userCell.textContent = board.user;
 
             const dateCell = document.createElement("td");
-            dateCell.textContent = `${board.time} | ${board.date}`;
+            dateCell.textContent = `${board.createdAt} | ${board.date}`;
 
             const moreCell = document.createElement("td");
             moreCell.classList.add("more-button");
@@ -169,30 +204,7 @@
         renderTable();
     }
 
-    function toBoard(e) {
-        const target = e.target;
 
-        if (
-            target.closest(".more-button") ||
-            target.closest(".more-buttons") ||
-            (target.tagName === "TD" && target.hasAttribute("contenteditable"))
-        ) {
-            return;
-        }
-
-        const row = target.closest("tr");
-        if (!row) return;
-
-        const name = row.querySelector("td")?.textContent.trim() || "";
-        //тут надо передать всю инфу по доске, пока передается тотлько имя
-        const boardInf = { name };
-
-        localStorage.setItem("boardInf", JSON.stringify(boardInf));
-
-        setTimeout(() => {
-            window.location.href = "board.html";
-        }, 0);
-    }
 
 
     searchInput.addEventListener("input", renderTable);
@@ -200,14 +212,14 @@
     addButton.addEventListener("click", () => {
         const now = new Date();
         const date = now.toLocaleDateString("ru-RU").slice(0, 8);
-        const time = now.toLocaleTimeString("ru-RU", { hour: '2-digit', minute: '2-digit' });
+        const createdAt = now.toLocaleTimeString("ru-RU", { hour: '2-digit', minute: '2-digit' });
 
 
         const newBoard = {
         title: `Новая доска ${boardCounter++}`,
-        user: userSettings.email,
+        user: userSetting.username,
         date,
-        time
+        createdAt
     };
 
         boards.push(newBoard);
@@ -217,9 +229,8 @@
         params.append('action', 'create');
 
         renderTable();
-    });
 
-    fetch('/folders', {
+        fetch('/folders', {
         method: 'POST',
         body: params
     })
@@ -235,6 +246,9 @@
     .catch(error => {
         console.error('Произошла ошибка:', error);
     });
+    });
+
+
 
     document.addEventListener("click", (e) => {
         if (

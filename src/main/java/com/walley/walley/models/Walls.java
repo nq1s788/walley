@@ -41,6 +41,11 @@ public class Walls {
         Date currentDate = new Date();
         createdAt = new Timestamp(currentDate.getTime());
     }
+    public Walls(String email, String username) {
+        this.email = email;
+        Date currentDate = new Date();
+        createdAt = new Timestamp(currentDate.getTime());
+    }
 
     public Long getId() {
         return id;

@@ -1,6 +1,6 @@
 
 function garden() {
-    window.location.href = 'garden.html';
+    window.location.href = '/garden.html';
 }
 
 // тут надо загрузить доски пользователя, поля:

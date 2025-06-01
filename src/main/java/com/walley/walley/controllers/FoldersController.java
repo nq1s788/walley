@@ -39,6 +39,7 @@ public class FoldersController {
             model.addAttribute("userSetting", userSetting);
             model.addAttribute("userStat", userStat);
             model.addAttribute("userTimer", userTimer);
+
         }
         return "folders";
     }
@@ -58,7 +59,18 @@ public class FoldersController {
             wall.setTitle(title);
             wallsRepository.save(wall);
             return "redirect:/garden";
+        } else if ("toBoard".equals(action)) {
+            MyUser user = (MyUser) session.getAttribute("user");
+            List<Walls> boards = wallsRepository.findAllByEmail(user.getEmail());
+            Walls foundWall = boards.stream()
+                    .filter(wall -> wall.getTitle().equals(title)) // Сравнение с помощью equals
+                    .findFirst() // Получаем первый найденный элемент
+                    .orElse(null); // Если не найдено, возвращаем null
 
+            if (foundWall != null) {
+                Long id = foundWall.getId(); // Получаем идентификатор
+                return "redirect:/board/" + id; // Переход на страницу доски
+            }
         }
         return "folders";
     }
