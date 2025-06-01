@@ -23,13 +23,17 @@ public class UserTimer {
     @Column(name = "timerStart")
     private java.sql.Timestamp timeStart;
 
-    public UserTimer(String email) {
-        this.email = email;
+    public UserTimer(MyUser user) {
         Date currentDate = new Date();
         timeStart = new Timestamp(currentDate.getTime());
+        this.user = user;
     }
 
     public UserTimer() {
+    }
+
+    public void setUser(MyUser user) {
+        this.user = user;
     }
 
     public String getEmail() {

@@ -18,8 +18,12 @@ public class UserStat {
     @Column(name = "totalBreakMinutes", nullable = false)
     private long totalBreakMinutes = 0;
 
-    public UserStat(String email) {
-        this.email = email;
+    public UserStat(MyUser user) {
+        this.user = user;
+    }
+
+    public void setUser(MyUser user) {
+        this.user = user;
     }
 
     public UserStat() {
