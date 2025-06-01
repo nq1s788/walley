@@ -22,6 +22,14 @@ body {
     backdrop-filter: blur(10px);
 }
 
+#my-form {
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+}
+
 #opacity-back {
     height: calc(100% - 30px);
     width: calc(100% - 255px);
@@ -227,3 +235,4 @@ body {
 #buttons-wrap button:hover {
     background: #EEF3D5;
 }
+
