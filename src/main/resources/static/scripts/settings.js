@@ -1,11 +1,11 @@
 
-function garden() {
+/*function garden() {
     window.location.href = 'garden.html';
 }
 function toHMin(min) {
     return `${Math.floor(min / 60)}ч. ${min % 60}мин.`
 }
-function getUsers() {
+/*function getUsers() {
     return JSON.parse(localStorage.getItem('users') || '{}');
 }
 function message(text) {
@@ -26,7 +26,7 @@ const workInput = document.getElementById("workInput");
 const restInput = document.getElementById("restInput");
 console.log(restInput)
 // userStat = {'totalWorkMinutes': 0, 'totalBreakMinutes': 0};
-const userStat = JSON.parse(localStorage.getItem("userStat"));
+// const userStat = JSON.parse(localStorage.getItem("userStat"));
 const totalWork = document.getElementById("totalWorkMinutes");
 const totalBreak = document.getElementById("totalBreakMinutes");
 totalWork.textContent = toHMin(userStat.totalWorkMinutes);
@@ -63,13 +63,13 @@ saveButton.addEventListener("click", () => {
         breakDuration: parseInt(restInput.value),
     };
     const users = getUsers();
-    users[email] = data.password;
+    users[data.email] = data.password;
     localStorage.setItem('users', JSON.stringify(users));
     localStorage.setItem("userSettings", JSON.stringify(data));
     message('Сохранено!')
 });
 
-resetButton.addEventListener("click", () => {
+/*resetButton.addEventListener("click", () => {
     workInput.value = 20;
     restInput.value = 5;
 
@@ -94,5 +94,43 @@ imageInput.addEventListener('change', () => {
     if (file) {
         reader.readAsDataURL(file);
     }
+});*/
+
+const saveButton = document.querySelector("#save");
+const resetButton = document.querySelector("#reset");
+const usernameDiv = document.getElementById("username");
+const avatar = document.getElementById("avatar");
+const imageInput = document.getElementById("image-input");
+
+let hiddenUsernameInput = document.createElement("input");
+hiddenUsernameInput.type = "hidden";
+hiddenUsernameInput.name = "username";
+document.forms[0].appendChild(hiddenUsernameInput);
+
+let hiddenAvatarInput = document.createElement("input");
+hiddenAvatarInput.type = "hidden";
+hiddenAvatarInput.name = "avatarURL";
+document.forms[0].appendChild(hiddenAvatarInput);
+
+saveButton.addEventListener("click", () => {
+    hiddenUsernameInput.value = usernameDiv.textContent;
+    const urlMatch = avatar.style.backgroundImage.match(/url\(["']?(.*?)["']?\)/);
+    hiddenAvatarInput.value = urlMatch ? urlMatch[1] : '';
 });
+
+avatar.addEventListener('click', () => {
+    imageInput.click();
+});
+imageInput.addEventListener('change', () => {
+    const file = imageInput.files[0];
+    const reader = new FileReader();
+    reader.onload = function (e) {
+        const dataUrl = e.target.result;
+        avatar.style.backgroundImage = `url("${dataUrl}")`;
+    };
+    if (file) {
+        reader.readAsDataURL(file);
+    }
+});
+
 
