@@ -57,6 +57,7 @@ public class FoldersController {
             String email = currUser.getEmail();
             Walls wall = new Walls(email);
             wall.setTitle(title);
+            wall.setUser(currUser);
             wallsRepository.save(wall);
             return "redirect:/garden";
         } else if ("toBoard".equals(action)) {

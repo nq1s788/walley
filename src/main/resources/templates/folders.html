@@ -20,7 +20,7 @@
         </button>
     </div>
 </form>
-
+<form id="my-form" action="/folders" method="get">
     <div id="opacity-back">
 
         <div id="container">
@@ -44,16 +44,16 @@
 
                     </thead>
                     <tbody id="table-body">
-                    <form action="/folders" method="get">
+
                     <tr th:each="wall : ${boards}" data-id="${wall.id}" onclick="toBoard(event)">
                         <td th:text="${wall.title}">Название</td>
-                        <td th:text="${wall.user}">Владелец</td>
+                        <td th:text="${wall.email}">Владелец</td>
                         <td th:text="${#dates.format(wall.createdAt, 'dd.MM.yyyy HH:mm')}">Дата</td>
                         <td>
                             <img src="/icons/more.svg" class="more-icon" style="cursor:pointer;">
                         </td>
                     </tr>
-                    </form>
+
                     </tbody>
                 </table>
             </div>
@@ -63,41 +63,15 @@
         </div>
 
     </div>
+</form>
 <script>
-    function toBoard(e) {
-        const target = e.target;
-
-        if (
-            target.closest(".more-button") ||
-            target.closest(".more-buttons") ||
-            (target.tagName === "TD" && target.hasAttribute("contenteditable"))
-        ) {
-            return;
-        }
-
-        const row = target.closest("tr");
-        if (!row) return;
-
-        const name = row.querySelector("td")?.textContent.trim() || "";
-        //тут надо передать всю инфу по доске, пока передается тотлько имя
-        const boardInf = { name };
-
-        const params = new URLSearchParams();
-        params.append('title', name);
-        params.append('action', 'toBoard');
-
-        fetch('/folders', {
-            method: 'POST',
-            body: params
-        })
-    }
 
 
 
     // тут надо загрузить доски пользователя, поля:
 
-    let boards = /*[[${boards}]]*/ [];
-    const userSetting = /*[[${userSetting}]]*/ {}
+    let boards = [[${boards}]];
+    const userSetting = [[${userSetting}]];
 
 
     console.log(boards); // Проверка данных
@@ -204,33 +178,60 @@
         renderTable();
     }
 
+    function toBoard(e) {
+        const target = e.target;
 
+        if (
+            target.closest(".more-button") ||
+            target.closest(".more-buttons") ||
+            (target.tagName === "TD" && target.hasAttribute("contenteditable"))
+        ) {
+            return;
+        }
+
+        const row = target.closest("tr");
+        if (!row) return;
+
+        const name = row.querySelector("td")?.textContent.trim() || "";
+        //тут надо передать всю инфу по доске, пока передается тотлько имя
+        const boardInf = { name };
+
+        const params = new URLSearchParams();
+        params.append('title', name);
+        params.append('action', 'toBoard');
+
+        fetch('/folders', {
+            method: 'POST',
+            body: params
+        });
+
+        renderTable();
+    }
 
 
     searchInput.addEventListener("input", renderTable);
 
-    addButton.addEventListener("click", () => {
-        const now = new Date();
-        const date = now.toLocaleDateString("ru-RU").slice(0, 8);
-        const createdAt = now.toLocaleTimeString("ru-RU", { hour: '2-digit', minute: '2-digit' });
+addButton.addEventListener("click", () => {
+    const now = new Date();
+    const date = now.toLocaleDateString("ru-RU").slice(0, 8);
+    const createdAt = now.toLocaleTimeString("ru-RU", { hour: '2-digit', minute: '2-digit' });
 
-
-        const newBoard = {
+    const newBoard = {
         title: `Новая доска ${boardCounter++}`,
         user: userSetting.username,
         date,
         createdAt
     };
 
-        boards.push(newBoard);
+    boards.push(newBoard); // Добавляем доску в массив
 
-        const params = new URLSearchParams();
-        params.append('title', newBoard.title);
-        params.append('action', 'create');
+    const params = new URLSearchParams();
+    params.append('title', newBoard.title);
+    params.append('action', 'create');
 
-        renderTable();
+    renderTable(); // Обновляем таблицу
 
-        fetch('/folders', {
+    fetch('/folders', {
         method: 'POST',
         body: params
     })
@@ -246,7 +247,7 @@
     .catch(error => {
         console.error('Произошла ошибка:', error);
     });
-    });
+});
 
 
 
