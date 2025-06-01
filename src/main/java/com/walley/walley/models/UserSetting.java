@@ -28,7 +28,14 @@ public class UserSetting {
     @Column(name = "breakDuration", nullable = false)
     private Duration breakDuration = Duration.ofSeconds(5);
 
+    @Version
+    private Long version;
+
     public UserSetting() {
+    }
+
+    public void setUser(MyUser user) {
+        this.user = user;
     }
 
     public UserSetting(String email) {

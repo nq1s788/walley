@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -45,10 +46,19 @@ public class FoldersController {
 
     @PostMapping("/folders")
     public String goToNextPages(@RequestParam String action,
+                                @RequestParam(required = false) String title,
                                 HttpSession session,
                                 Model model) {
         if ("garden".equals(action)) {
-            return "garden";
+            return "redirect:/garden";
+        } else if ("create".equals(action)) {
+            MyUser currUser = (MyUser) session.getAttribute("user");
+            String email = currUser.getEmail();
+            Walls wall = new Walls(email);
+            wall.setTitle(title);
+            wallsRepository.save(wall);
+            return "redirect:/garden";
+
         }
         return "folders";
     }

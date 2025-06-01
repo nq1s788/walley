@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.web.servlet.ModelAndView;
 
 
 //Контроллер отслеживает все переходы пользователя между страницами
@@ -53,7 +54,8 @@ public class MainController {
                                HttpSession session,
                                Model model) {
         if ("register".equals(action)) {
-            if (service.userExists(email)) {
+            MyUser existingUser = userRepository.findByEmail(email);
+            if (existingUser != null) {
                 model.addAttribute("error", "Пользователь уже существует");
                 return "index"; // Вернуться на страницу с ошибкой
             }
@@ -61,6 +63,7 @@ public class MainController {
             UserSetting userSetting = new UserSetting(email);
             UserStat userStat = new UserStat(email);
             UserTimer userTimer = new UserTimer(email);
+            userSetting.setUser(user);
             userRepository.save(user);
             userSettingRepository.save(userSetting);
             userStatRepository.save(userStat);
@@ -69,7 +72,9 @@ public class MainController {
             session.setAttribute("userSetting", userSetting);
             session.setAttribute("userStat", userStat);
             session.setAttribute("userTimer", userTimer);
-            return "redirect:/garden"; // Перенаправление после успешной регистрации
+            return "redirect:/garden";
+
+             // Перенаправление после успешной регистрации
         } else if ("login".equals(action)) {
             if (!service.validateUser(email, password)) {
                 model.addAttribute("error", "Неверный логин или пароль");
@@ -83,4 +88,6 @@ public class MainController {
         }
         return "index"; // На всякий случай
     }
+
+
 }

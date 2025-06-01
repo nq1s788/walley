@@ -39,10 +39,10 @@ public class GardenController {
         if (session.getAttribute("user") == null) {
             return "redirect:/";
         }
-        session.setAttribute("user", session.getAttribute("user"));
-        session.setAttribute("userSetting", session.getAttribute("userSetting"));
-        session.setAttribute("userStat", session.getAttribute("userStat"));
-        session.setAttribute("userTimer", session.getAttribute("userTimer"));
+        //session.setAttribute("user", session.getAttribute("user"));
+        //session.setAttribute("userSetting", session.getAttribute("userSetting"));
+        //session.setAttribute("userStat", session.getAttribute("userStat"));
+        //session.setAttribute("userTimer", session.getAttribute("userTimer"));
 
 
 
