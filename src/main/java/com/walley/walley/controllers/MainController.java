@@ -47,7 +47,7 @@ public class MainController {
         return "index";
     }
 
-    @PostMapping("/") // Используйте один адрес для обработки
+    @PostMapping("/")
     public String handleSubmit(@RequestParam String action,
                                @RequestParam String email,
                                @RequestParam String password,
@@ -57,24 +57,28 @@ public class MainController {
             MyUser existingUser = userRepository.findByEmail(email);
             if (existingUser != null) {
                 model.addAttribute("error", "Пользователь уже существует");
-                return "index"; // Вернуться на страницу с ошибкой
+                return "index";
             }
             MyUser user = new MyUser(email, password);
-            UserSetting userSetting = new UserSetting(email);
-            UserStat userStat = new UserStat(email);
-            UserTimer userTimer = new UserTimer(email);
-            userSetting.setUser(user);
+            UserSetting userSetting = new UserSetting(user);
+            UserStat userStat = new UserStat(user);
+            UserTimer userTimer = new UserTimer(user);
+
+            user.setUserSetting(userSetting);
+            user.setUserStat(userStat);
+            user.setUserTimer(userTimer);
+
+            //userSetting.setUser(user);
+            //userStat.setUser(user);
+            //userTimer.setUser(user);
+
             userRepository.save(user);
-            userSettingRepository.save(userSetting);
-            userStatRepository.save(userStat);
-            userTimerRepository.save(userTimer);
+
             session.setAttribute("user", user);
             session.setAttribute("userSetting", userSetting);
             session.setAttribute("userStat", userStat);
             session.setAttribute("userTimer", userTimer);
             return "redirect:/garden";
-
-             // Перенаправление после успешной регистрации
         } else if ("login".equals(action)) {
             if (!service.validateUser(email, password)) {
                 model.addAttribute("error", "Неверный логин или пароль");

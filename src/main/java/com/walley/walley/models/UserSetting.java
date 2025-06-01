@@ -20,7 +20,7 @@ public class UserSetting {
     private String username;
 
     @Column(name = "avatarURL", nullable = false)
-    private String avatarUrl;
+    private String avatarUrl = "src/main/resources/static/pic/user1.jpg";
 
     @Column(name = "workDuration", nullable = false)
     private Duration workDuration = Duration.ofSeconds(20);
@@ -28,8 +28,8 @@ public class UserSetting {
     @Column(name = "breakDuration", nullable = false)
     private Duration breakDuration = Duration.ofSeconds(5);
 
-    @Version
-    private Long version;
+    ///@Version
+    ///private Long version;
 
     public UserSetting() {
     }
@@ -38,9 +38,9 @@ public class UserSetting {
         this.user = user;
     }
 
-    public UserSetting(String email) {
-        this.email = email;
-        this.username = email; // Предполагается, что username равен email
+    public UserSetting(MyUser user) {
+        this.username = user.getEmail(); // Предполагается, что username равен email
+        this.user = user;
     }
 
     public String getEmail() {

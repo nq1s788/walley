@@ -1,10 +1,6 @@
 package com.walley.walley.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "users")
@@ -15,6 +11,13 @@ public class MyUser {
 
     @Column(name = "password", nullable = false)
     private String password;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private UserSetting userSetting;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private UserStat userStat;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private UserTimer userTimer;
 
     public MyUser(String email, String password) {
         this.email = email;
@@ -38,5 +41,29 @@ public class MyUser {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public void setUserSetting(UserSetting userSetting) {
+        this.userSetting = userSetting;
+    }
+
+    public void setUserStat(UserStat userStat) {
+        this.userStat = userStat;
+    }
+
+    public void setUserTimer(UserTimer userTimer) {
+        this.userTimer = userTimer;
+    }
+
+    public UserSetting getUserSetting() {
+        return userSetting;
+    }
+
+    public UserStat getUserStat() {
+        return userStat;
+    }
+
+    public UserTimer getUserTimer() {
+        return userTimer;
     }
 }
