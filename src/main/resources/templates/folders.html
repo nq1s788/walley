@@ -35,13 +35,20 @@
                         <tr>
                             <th>Название<img onclick="sortBy('title')" src="icons/sort.svg"></th>
                             <th>Владелец<img onclick="sortBy('user')" src="icons/sort.svg"></th>
-                            <th>Последнее изменение<img onclick="sortBy('date')" src="/icons/sort.svg"></th>
+                            <th>Последнее изменение<img onclick="sortBy('createdAt')" src="/icons/sort.svg"></th>
                             <th></th>
 
                         </tr>
                     </thead>
-                    <tbody id="table-body">
-                        <!-- Данные будут добавлены через JS или вручную -->
+                    <tbody>
+                    <tr th:each="wall : ${boards}">
+                        <td th:text="${wall.title}">Название</td>
+                        <td th:text="${wall.email}">Владелец</td>
+                        <td th:text="${#dates.format(wall.createdAt, 'dd.MM.yyyy HH:mm')}">Дата</td>
+                        <td>
+                            <img src="/icons/more.svg" class="more-icon" style="cursor:pointer;">
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
             </div>
@@ -51,12 +58,7 @@
         </div>
     </div>
 </form>
-    <script src="/scripts/garden.js" th:inline="javascript">
 
-        let boards = [[${boards}]];
-        const userSettings = [[${userSetting}]];
-
-    </script>
 
 </body>
 
