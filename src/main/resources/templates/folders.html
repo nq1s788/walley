@@ -64,8 +64,7 @@
 
     </div>
 </form>
-<script>
-
+<script  th:inline="javascript">
 
 
     // тут надо загрузить доски пользователя, поля:
@@ -178,7 +177,7 @@
         renderTable();
     }
 
-    function toBoard(e) {
+function toBoard(e) {
         const target = e.target;
 
         if (
@@ -209,6 +208,9 @@
     }
 
 
+
+
+
     searchInput.addEventListener("input", renderTable);
 
 addButton.addEventListener("click", () => {
@@ -218,7 +220,7 @@ addButton.addEventListener("click", () => {
 
     const newBoard = {
         title: `Новая доска ${boardCounter++}`,
-        user: userSetting.username,
+        user: userSetting.getUsername,
         date,
         createdAt
     };

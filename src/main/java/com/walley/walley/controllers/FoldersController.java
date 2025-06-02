@@ -59,7 +59,7 @@ public class FoldersController {
             wall.setTitle(title);
             wall.setUser(currUser);
             wallsRepository.save(wall);
-            return "redirect:/garden";
+            return "redirect:/folders";
         } else if ("toBoard".equals(action)) {
             MyUser user = (MyUser) session.getAttribute("user");
             List<Walls> boards = wallsRepository.findAllByEmail(user.getEmail());
