@@ -36,7 +36,7 @@
 
                         <tr>
                             <th>Название<img onclick="sortBy('title')" src="icons/sort.svg"></th>
-                            <th>Владелец<img onclick="sortBy('user')" src="icons/sort.svg"></th>
+                            <th>Владелец<img onclick="sortBy('email')" src="icons/sort.svg"></th>
                             <th>Последнее изменение<img onclick="sortBy('createdAt')" src="/icons/sort.svg"></th>
                             <th></th>
 
@@ -44,15 +44,6 @@
 
                     </thead>
                     <tbody id="table-body">
-
-                    <tr th:each="wall : ${boards}" data-id="${wall.id}" onclick="toBoard(event)">
-                        <td th:text="${wall.title}">Название</td>
-                        <td th:text="${wall.email}">Владелец</td>
-                        <td th:text="${#dates.format(wall.createdAt, 'dd.MM.yyyy HH:mm')}">Дата</td>
-                        <td>
-                            <img src="/icons/more.svg" class="more-icon" style="cursor:pointer;">
-                        </td>
-                    </tr>
 
                     </tbody>
                 </table>
@@ -91,7 +82,7 @@
 
         const filtered = boards.filter(board =>
             board.title.toLowerCase().includes(searchInput.value.toLowerCase()) ||
-            board.user.toLowerCase().includes(searchInput.value.toLowerCase())
+            board.email.toLowerCase().includes(searchInput.value.toLowerCase())
         );
 
         filtered.forEach((board, index) => {
@@ -101,7 +92,7 @@
             titleCell.textContent = board.title;
 
             const userCell = document.createElement("td");
-            userCell.textContent = board.user;
+            userCell.textContent = board.email;
 
             const dateCell = document.createElement("td");
             dateCell.textContent = `${board.createdAt} | ${board.date}`;
@@ -219,19 +210,20 @@ addButton.addEventListener("click", () => {
     const createdAt = now.toLocaleTimeString("ru-RU", { hour: '2-digit', minute: '2-digit' });
 
     const newBoard = {
+        //id: '${boardCounter++}';
         title: `Новая доска ${boardCounter++}`,
-        user: userSetting.getUsername,
+        email: userSetting.username,
         date,
         createdAt
     };
 
-    boards.push(newBoard); // Добавляем доску в массив
+    //boards.push(newBoard); // Добавляем доску в массив
 
     const params = new URLSearchParams();
     params.append('title', newBoard.title);
     params.append('action', 'create');
 
-    renderTable(); // Обновляем таблицу
+
 
     fetch('/folders', {
         method: 'POST',
@@ -249,6 +241,9 @@ addButton.addEventListener("click", () => {
     .catch(error => {
         console.error('Произошла ошибка:', error);
     });
+
+    boards = [[${boards}]];
+    renderTable(); // Обновляем таблицу
 });
 
 
