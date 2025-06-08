@@ -95,7 +95,8 @@
             userCell.textContent = board.email;
 
             const dateCell = document.createElement("td");
-            dateCell.textContent = `${board.createdAt} | ${board.date}`;
+            //dateCell.textContent = `${board.createdAt} | ${board.date}`;
+            dateCell.textContent = `${board.createdAt}`;
 
             const moreCell = document.createElement("td");
             moreCell.classList.add("more-button");
@@ -193,6 +194,7 @@ function toBoard(e) {
         fetch('/folders', {
             method: 'POST',
             body: params
+
         });
 
         renderTable();
@@ -204,6 +206,40 @@ function toBoard(e) {
 
     searchInput.addEventListener("input", renderTable);
 
+    addButton.addEventListener("click", () => {
+    const now = new Date();
+    const date = now.toLocaleDateString("ru-RU").slice(0, 8);
+    const createdAt = now.toLocaleTimeString("ru-RU", { hour: '2-digit', minute: '2-digit' });
+
+    const newBoard = {
+        title: `Новая доска ${boardCounter++}`,
+        email: userSetting.username,
+        date,
+        createdAt
+    };
+
+    const params = new URLSearchParams();
+    params.append('title', newBoard.title);
+    params.append('action', 'create');
+
+    fetch('/folders', {
+        method: 'POST',
+        body: params,
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
+    })
+    .then(() => {
+        // Если вы хотите обновить интерфейс сразу после отправки данных
+        boards = [[${boards}]];
+        renderTable(); // Обновляем таблицу
+    })
+    .catch(error => {
+        console.error('Произошла ошибка:', error);
+    });
+});
+
+/*
 addButton.addEventListener("click", () => {
     const now = new Date();
     const date = now.toLocaleDateString("ru-RU").slice(0, 8);
@@ -223,8 +259,6 @@ addButton.addEventListener("click", () => {
     params.append('title', newBoard.title);
     params.append('action', 'create');
 
-
-
     fetch('/folders', {
         method: 'POST',
         body: params
@@ -242,10 +276,11 @@ addButton.addEventListener("click", () => {
         console.error('Произошла ошибка:', error);
     });
 
-    boards = [[${boards}]];
+    console.log(boards);
     renderTable(); // Обновляем таблицу
 });
 
+*/
 
 
     document.addEventListener("click", (e) => {

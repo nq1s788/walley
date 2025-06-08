@@ -10,7 +10,7 @@ import java.util.Date;
 public class Walls {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "wallID", nullable = false, unique = true)
+    @Column(name = "wallid", nullable = false, unique = true)
     private Long id;
 
     @Column(name = "email")

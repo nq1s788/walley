@@ -5,12 +5,14 @@ import com.walley.walley.repo.*;
 import com.walley.walley.services.AppService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -59,7 +61,12 @@ public class FoldersController {
             wall.setTitle(title);
             wall.setUser(currUser);
             wallsRepository.save(wall);
-            return "redirect:/folders";
+            System.out.println(title);
+            List<Walls> boards = wallsRepository.findAllByEmail(currUser.getEmail());
+            model.addAttribute("boards", boards);
+            session.setAttribute("boards", boards);
+            return "return:folders";
+
         } else if ("toBoard".equals(action)) {
             MyUser user = (MyUser) session.getAttribute("user");
             List<Walls> boards = wallsRepository.findAllByEmail(user.getEmail());
@@ -70,7 +77,8 @@ public class FoldersController {
 
             if (foundWall != null) {
                 Long id = foundWall.getId(); // Получаем идентификатор
-                return "redirect:/board/" + id; // Переход на страницу доски
+                return "redirect:/board";
+                //return "redirect:/board/" + id; // Переход на страницу доски
             }
         }
         return "folders";
