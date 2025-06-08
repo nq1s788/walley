@@ -89,7 +89,7 @@
 
         filtered.forEach((board, index) => {
             const row = document.createElement("tr");
-            row.setAttribute('data-wallid', board.wallid);
+            row.setAttribute('data-wallid', board.id);
 
             const titleCell = document.createElement("td");
             titleCell.textContent = board.title;
