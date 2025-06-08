@@ -216,44 +216,6 @@
     });
 }
 
-/*function toBoard(e) {
-        const target = e.target;
-
-        if (
-            target.closest(".more-button") ||
-            target.closest(".more-buttons") ||
-            (target.tagName === "TD" && target.hasAttribute("contenteditable"))
-        ) {
-            return;
-        }
-
-        const row = target.closest("tr");
-        if (!row) return;
-        console.log("дошли до toboard");
-
-        const name = row.querySelector("td")?.textContent.trim() || "";
-        //тут надо передать всю инфу по доске, пока передается тотлько имя
-        const boardInf = { name };
-
-        const params = new URLSearchParams();
-        params.append('title', name);
-        params.append('action', 'toBoard');
-
-        fetch('/folders', {
-            method: 'POST',
-            body: params
-
-        })
-        .then(() => {
-        window.location.href = "/board/" + id;
-        })
-        .catch(error => {
-            console.error('Произошла ошибка:', error);
-        });
-
-        //renderTable();
-    }
-*/
 
 
 

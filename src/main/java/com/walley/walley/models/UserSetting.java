@@ -36,12 +36,12 @@ public class UserSetting {
 
     public void setUser(MyUser user) {
         this.user = user;
+
     }
 
     public UserSetting(MyUser user) {
         this.username = user.getEmail(); // Предполагается, что username равен email
         this.user = user;
-        this.email = user.getEmail();
     }
 
     public String getEmail() {
