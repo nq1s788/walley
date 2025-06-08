@@ -37,7 +37,7 @@
                         <tr>
                             <th>Название<img onclick="sortBy('title')" src="icons/sort.svg"></th>
                             <th>Владелец<img onclick="sortBy('email')" src="icons/sort.svg"></th>
-                            <th>Последнее изменение<img onclick="sortBy('createdAt')" src="/icons/sort.svg"></th>
+                            <th>Дата создания<img onclick="sortBy('createdAt')" src="/icons/sort.svg"></th>
                             <th></th>
 
                         </tr>
@@ -253,7 +253,8 @@
     })
     .then(updatedBoards => {
         boards = updatedBoards; // Обновляем массив досок
-        renderTable(); // Обновляем таблицу
+        //renderTable(); // Обновляем таблицу
+        location.reload();
     })
     .catch(error => {
         console.error('Произошла ошибка:', error);

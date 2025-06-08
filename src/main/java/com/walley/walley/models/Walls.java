@@ -36,13 +36,15 @@ public class Walls {
         createdAt = new Timestamp(currentDate.getTime());
     }
 
-    public Walls(String email) {
-        this.email = email;
+    public Walls(MyUser user) {
+        this.user = user;
+        this.email = user.getEmail();
         Date currentDate = new Date();
         createdAt = new Timestamp(currentDate.getTime());
     }
-    public Walls(String email, String username) {
-        this.email = email;
+    public Walls(MyUser user, String username) {
+        this.user = user;
+        this.email = user.getEmail();
         Date currentDate = new Date();
         createdAt = new Timestamp(currentDate.getTime());
     }
