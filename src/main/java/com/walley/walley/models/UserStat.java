@@ -13,9 +13,9 @@ public class UserStat {
     @JoinColumn(name = "email")
     private MyUser user;
 
-    @Column(name = "totalWorkMinutes", nullable = false)
+    @Column(name = "total_work_minutes", nullable = false)
     private long totalWorkMinutes = 0;
-    @Column(name = "totalBreakMinutes", nullable = false)
+    @Column(name = "total_break_minutes", nullable = false)
     private long totalBreakMinutes = 0;
 
     public UserStat(MyUser user) {

@@ -36,16 +36,17 @@ public class SettingController {
     @GetMapping("/settings")
     public String setting(HttpSession session, Model model) {
         MyUser user = (MyUser) session.getAttribute("user");
-        UserSetting setting = (UserSetting) session.getAttribute("userSetting");
-        System.out.println(setting.getUsername());
+        UserSetting userSetting = (UserSetting) session.getAttribute("userSetting");
+        System.out.println(userSetting.getUsername());
         UserStat stat = (UserStat) session.getAttribute("userStat");
         UserTimer timer = (UserTimer) session.getAttribute("userTimer");
         if (user != null) {
             model.addAttribute("user", user);
-            model.addAttribute("userSetting", setting);
+            model.addAttribute("userSetting", userSetting);
             model.addAttribute("userStat", stat);
             model.addAttribute("userTimer", timer);
         }
+        System.out.println(model.getAttribute("userStat"));
         return "settings";
     }
 
@@ -56,35 +57,44 @@ public class SettingController {
                               @RequestParam(required = false) String password,
                               @RequestParam(required = false) Integer workInput,
                               @RequestParam(required = false) Integer restInput,
-                                HttpSession session,
-                                Model model) {
+                              HttpSession session,
+                              Model model) {
         MyUser user = (MyUser) session.getAttribute("user");
-        UserSetting setting = (UserSetting) session.getAttribute("userSetting");
+        UserSetting userSetting = (UserSetting) session.getAttribute("userSetting");
         UserStat stat = (UserStat) session.getAttribute("userStat");
+        System.out.println(stat.getTotalWorkMinutes());
         if ("garden".equals(action)) {
             return "redirect:/garden";
-        } else if ("save".equals(action)) {
-            if (password != null) {
-                if(!password.isBlank()) {
-                    user.setPassword(password);
-                }
+        }
+        else if ("save".equals(action)) {
+            // Обновление пароля
+            if (password != null && !password.isBlank()) {
+                user.setPassword(password);
+            }
+            if (userSetting == null) {
+                model.addAttribute("message", "Настройки не найдены.");
+                return "settings";
             }
             if (workInput != null && restInput != null) {
-                setting.setWorkDuration(Duration.ofMinutes(workInput));
-                setting.setBreakDuration(Duration.ofMinutes(restInput));
+                userSetting.setWorkDuration(Duration.ofMinutes(workInput));
+                userSetting.setBreakDuration(Duration.ofMinutes(restInput));
             }
             if (username != null && !username.isBlank()) {
-                setting.setUsername(username);
+                userSetting.setUsername(username);
             }
-            userRepository.save(user);
+
+            userRepository.save(user); // Сохраняем пользователя
+            userSettingRepository.save(userSetting); // Сохраняем обновленные настройки
+
             session.setAttribute("user", user);
-            session.setAttribute("userSetting", setting);
+            session.setAttribute("userSetting", userSetting);
+            session.setAttribute("userStat", stat);
             model.addAttribute("message", "Настройки сохранены.");
-        } else if ("reset".equals(action)) {
+        }
+        else if ("reset".equals(action)) {
             stat.setTotalBreakMinutes(0);
             stat.setTotalWorkMinutes(0);
-            userRepository.save(user);
-            session.setAttribute("user", user);
+            userStatRepository.save(stat); // Сохраняем статистику
             session.setAttribute("userStat", stat);
             model.addAttribute("message", "Прогресс сброшен.");
         }

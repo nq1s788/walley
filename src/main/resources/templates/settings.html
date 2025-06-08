@@ -29,10 +29,10 @@
                     <div id="avatar">
                         <input type="file" id="image-input" accept="image/*" style="display: none;">
                     </div>
-                    <div id="username" contenteditable="true" spellcheck="false" th:text="${userSetting.username}"></div>
+                    <div id="username" contenteditable="true" spellcheck="false"></div>
                     <div class="form-row">
                         <label for="email">Почта</label>
-                        <input type="email" id="email" th:value="${user.email}" required disabled>
+                        <input type="email" id="email"  required disabled>
                     </div>
                     <div class="form-row">
                         <label for="password">Пароль</label>
@@ -46,13 +46,13 @@
 
                     <div class="row">
                         <label>Время работы</label>
-                        <input id="workInput" type="number" min="1" max="60" th:value="${userSetting.workDuration.toMinutes()}">
+                        <input id="workInput" type="number" min="1" max="60" value="20">
                         <label>мин.</label>
 
                     </div>
                     <div class="row">
                         <label>Время отдыха</label>
-                        <input id="restInput" type="number" min="1" max="60" th:value="${userSetting.breakDuration.toMinutes()}">
+                        <input id="restInput" type="number" min="1" max="60" value="5">
                         <label>мин.</label>
                     </div>
 
@@ -62,12 +62,12 @@
 
                     <div class="row">
                         <label>Время работы</label>
-                        <label id="totalWorkMinutes" th:text="${userStat.totalWorkMinutes}"></label>
+                        <label id="totalWorkMinutes"></label>
 
                     </div>
                     <div class="row">
                         <label>Время отдыха</label>
-                        <label id="totalBreakMinutes" th:text="${userStat.totalBreakMinutes}"></label>
+                        <label id="totalBreakMinutes"></label>
 
 
                     </div>
@@ -87,90 +87,110 @@
     <script th:inline="javascript">
 
 
-function toHMin(min) {
-    return `${Math.floor(min / 60)}ч. ${min % 60}мин.`
-}
+        function toHMin(min) {
+            return `${Math.floor(min / 60)}ч. ${min % 60}мин.`
+        }
+        function message(text) {
+            messageDiv.style.display = 'block';
+            messageDiv.textContent = text;
+            setTimeout(() => {
+                messageDiv.style.display = 'none';
+            }, 1000);
+        }
 
-function message(text) {
-    messageDiv.style.display = 'block';
-    messageDiv.textContent = text;
-    setTimeout(() => {
-        messageDiv.style.display = 'none';
-    }, 1000);
-}
+        const saveButton = document.querySelector("#buttons button:first-child");
+        const resetButton = document.querySelector("#buttons button:nth-child(2)");
 
-const saveButton = document.querySelector("#buttons button:first-child");
-const resetButton = document.querySelector("#buttons button:nth-child(2)");
+        const emailInput = document.getElementById("email");
+        const passwordInput = document.getElementById("password");
+        const usernameInput = document.getElementById("username")
+        const workInput = document.getElementById("workInput");
+        const restInput = document.getElementById("restInput");
+        console.log(restInput)
+        // userStat = {'totalWorkMinutes': 0, 'totalBreakMinutes': 0};
+        const userStat = [[${userStat}]];
+        console.log(userStat);
+        const totalWork = document.getElementById("totalWorkMinutes");
+        const totalBreak = document.getElementById("totalBreakMinutes");
+        totalWork.textContent = userStat.totalWorkMinutes;
+        totalBreak.textContent = userStat.totalBreakMinutes;
 
-const emailInput = document.getElementById("email");
-const passwordInput = document.getElementById("password");
-const usernameInput = document.getElementById("username")
-const workInput = document.getElementById("workInput");
-const restInput = document.getElementById("restInput");
-console.log(restInput)
-console.log(passwordInput)
-
-const userStat = [[${userStat}]];
-const totalWork = document.getElementById("totalWorkMinutes");
-const totalBreak = document.getElementById("totalBreakMinutes");
-totalWork.textContent = toHMin(userStat.totalWorkMinutes);
-totalBreak.textContent = toHMin(userStat.totalBreakMinutes);
-
-const messageDiv = document.getElementById('message');
-const avatar = document.getElementById('avatar');
-let imageInput = document.getElementById('image-input');
-
+        const messageDiv = document.getElementById('message');
+        const avatar = document.getElementById('avatar');
+        let imageInput = document.getElementById('image-input');
 
 
 
 
-let hiddenUsernameInput = document.createElement("input");
-hiddenUsernameInput.type = "hidden";
-hiddenUsernameInput.name = "username";
-document.forms[0].appendChild(hiddenUsernameInput);
 
-let hiddenAvatarInput = document.createElement("input");
-hiddenAvatarInput.type = "hidden";
-hiddenAvatarInput.name = "avatarURL";
-document.forms[0].appendChild(hiddenAvatarInput);
-
-saveButton.addEventListener("click", () => {
-    hiddenUsernameInput.value = usernameDiv.textContent;
-    const urlMatch = avatar.style.backgroundImage.match(/url\(["']?(.*?)["']?\)/);
-    hiddenAvatarInput.value = urlMatch ? urlMatch[1] : '';
-
-    const params = new URLSearchParams();
-    params.append({
-        'email': emailInput.value,
-        'password': passwordInput.value,
-        'username': usernameInput.textContent,
-        'avatarURL': (avatar.style.backgroundImage.match(/url\(["']?(.*?)["']?\)/) || [])[1] || '',
-        'workDuration': parseInt(workInput.value),
-        'breakDuration': parseInt(restInput.value),
+        window.addEventListener("DOMContentLoaded", () => {
+            // userSettings = { 'email': email, 'password': password, 'username': getUsernameFromEmail(email), 'avatarURL':'pic/user1.jpg',  'workDuration': defaultWork, 'breakDuration': defaultBreak };
+            //const savedData = JSON.parse(localStorage.getItem("userSettings"));
+            const savedData = [[${userSetting}]];
+            if (savedData) {
+                emailInput.value = savedData.email || "";
+                passwordInput.value = savedData.password || "";
+                usernameInput.textContent = savedData.username || "";
+                avatar.style.backgroundImage = 'url(' + (savedData.avatarURL || '') + ')';
+                workInput.value = savedData.workDuration / 60 || 20;
+                restInput.value = savedData.breakDuration /60 || 5;
+            }
         });
-        fetch('/folders', {
-        method: 'POST',
-        body: params
-    }).catch(error => {
-        console.error('Произошла ошибка:', error);
-    });
-});
 
-avatar.addEventListener('click', () => {
-    imageInput.click();
-});
-imageInput.addEventListener('change', () => {
-    const file = imageInput.files[0];
-    const reader = new FileReader();
-    reader.onload = function (e) {
-        const dataUrl = e.target.result;
-        avatar.style.backgroundImage = `url("${dataUrl}")`;
-    };
-    if (file) {
-        reader.readAsDataURL(file);
-    }
-});
+        saveButton.addEventListener("click", () => {
+            const data = {
+                email: emailInput.value,
+                password: passwordInput.value,
+                username: usernameInput.textContent,
+                avatarURL: (avatar.style.backgroundImage.match(/url\(["']?(.*?)["']?\)/) || [])[1] || '',
+                workDuration: parseInt(workInput.value),
+                breakDuration: parseInt(restInput.value),
+            };
+            const params = new URLSearchParams();
+        params.append({
+            'email': emailInput.value,
+            'password': passwordInput.value,
+            'username': usernameInput.textContent,
+            'avatarURL': (avatar.style.backgroundImage.match(/url\(["']?(.*?)["']?\)/) || [])[1] || '',
+            'workDuration': parseInt(workInput.value),
+            'breakDuration': parseInt(restInput.value),
+            });
+            fetch('/folders', {
+            method: 'POST',
+            body: params
+        }).catch(error => {
+            console.error('Произошла ошибка:', error);
+        });
+            message('Сохранено!')
+        });
 
+        resetButton.addEventListener("click", () => {
+            workInput.value = 20;
+            restInput.value = 5;
+
+            const savedData = [[${userSetting}]] || {};
+            savedData.workDuration = 20;
+            savedData.breakDuration = 5;
+
+
+            message('Сброшено!')
+
+        });
+        avatar.addEventListener('click', () => {
+            imageInput.click();
+        });
+
+        imageInput.addEventListener('change', () => {
+            const file = imageInput.files[0];
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const dataUrl = e.target.result;
+                avatar.style.backgroundImage = `url("${dataUrl}")`;
+            };
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+        });
 
 
 
