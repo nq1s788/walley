@@ -1,5 +1,3 @@
-
-
 let tool = 'move';
 let notes = [];
 let threads = [];
