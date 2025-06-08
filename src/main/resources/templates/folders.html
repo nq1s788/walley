@@ -89,6 +89,7 @@
 
         filtered.forEach((board, index) => {
             const row = document.createElement("tr");
+            row.setAttribute('data-wallid', board.wallid);
 
             const titleCell = document.createElement("td");
             titleCell.textContent = board.title;
@@ -187,10 +188,13 @@
     console.log("дошли до toboard");
 
     const name = row.querySelector("td")?.textContent.trim() || "";
+    const wallid = row.dataset.myfield;
+
     const boardInf = { name };
 
     const params = new URLSearchParams();
     params.append('title', name);
+    params.append('wallid', wallid);
     params.append('action', 'toBoard');
 
     fetch('/folders', {
