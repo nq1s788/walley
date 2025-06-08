@@ -29,6 +29,8 @@ public class Notes {
     private boolean IsHeadline = true;
     @Column(name = "t")
     private boolean Istime = true;
+    @Column(name = "content")
+    private String content = "";
 
     public Notes() {
     }
@@ -91,5 +93,13 @@ public class Notes {
 
     public void setIstime(boolean istime) {
         Istime = istime;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }

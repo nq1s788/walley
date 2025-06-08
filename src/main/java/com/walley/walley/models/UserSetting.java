@@ -23,10 +23,10 @@ public class UserSetting {
     private String avatarUrl = "src/main/resources/static/pic/user1.jpg";
 
     @Column(name = "workDuration", nullable = false)
-    private Duration workDuration = Duration.ofSeconds(20);
+    private Duration workDuration = Duration.ofSeconds(20 * 60);
 
     @Column(name = "breakDuration", nullable = false)
-    private Duration breakDuration = Duration.ofSeconds(5);
+    private Duration breakDuration = Duration.ofSeconds(5 * 60);
 
     ///@Version
     ///private Long version;
