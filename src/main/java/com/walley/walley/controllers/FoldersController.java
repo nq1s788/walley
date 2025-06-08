@@ -57,9 +57,8 @@ public class FoldersController {
         }
 
         if ("create".equals(action)) {
-            Walls wall = new Walls(currUser.getEmail());
+            Walls wall = new Walls(currUser);
             wall.setTitle(title);
-            wall.setUser(currUser);
             wallsRepository.save(wall);
 
             // Получаем обновленный список досок
