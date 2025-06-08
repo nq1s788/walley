@@ -5,6 +5,7 @@ import com.walley.walley.repo.*;
 import com.walley.walley.services.AppService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.net.URI;
 import java.util.List;
 
 @Controller
@@ -45,16 +47,57 @@ public class FoldersController {
         }
         return "folders";
     }
-
-
     @PostMapping("/folders")
+    public ResponseEntity<?> goToNextPages(@RequestParam(required = false) String action,
+                                           @RequestParam(required = false) String title,
+                                           HttpSession session) {
+        MyUser currUser = (MyUser) session.getAttribute("user");
+        if ("garden".equals(action)) {
+            return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("/garden")).build();
+        }
+
+        if ("create".equals(action)) {
+            Walls wall = new Walls(currUser.getEmail());
+            wall.setTitle(title);
+            wall.setUser(currUser);
+            wallsRepository.save(wall);
+
+            // Получаем обновленный список досок
+            List<Walls> boards = wallsRepository.findAllByEmail(currUser.getEmail());
+
+            // Возвращаем список досок
+            return ResponseEntity.ok(boards);
+        }
+
+        if ("toBoard".equals(action)) {
+            List<Walls> boards = wallsRepository.findAllByEmail(currUser.getEmail());
+            Walls foundWall = boards.stream()
+                    .filter(wall -> wall.getTitle().equals(title))
+                    .findFirst()
+                    .orElse(null);
+
+            if (foundWall != null) {
+                Long id = foundWall.getId();
+                // Возвращаем идентификатор доски
+                return ResponseEntity.ok(id);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Доска не найдена");
+            }
+        }
+
+        return ResponseEntity.badRequest().body("Неверный запрос");
+    }
+
+
+    /* @PostMapping("/folders")
     public String goToNextPages(@RequestParam String action,
                                 @RequestParam(required = false) String title,
                                 HttpSession session,
                                 Model model) {
         if ("garden".equals(action)) {
             return "redirect:/garden";
-        } else if ("create".equals(action)) {
+        }
+        if ("create".equals(action)) {
             MyUser currUser = (MyUser) session.getAttribute("user");
             String email = currUser.getEmail();
             Walls wall = new Walls(email);
@@ -65,22 +108,28 @@ public class FoldersController {
             List<Walls> boards = wallsRepository.findAllByEmail(currUser.getEmail());
             model.addAttribute("boards", boards);
             session.setAttribute("boards", boards);
-            return "return:folders";
+            return "folders";
 
-        } else if ("toBoard".equals(action)) {
+        }
+        if ("toBoard".equals(action)) {
+            System.out.println("дошли до toboard в контроллере");
             MyUser user = (MyUser) session.getAttribute("user");
             List<Walls> boards = wallsRepository.findAllByEmail(user.getEmail());
             Walls foundWall = boards.stream()
-                    .filter(wall -> wall.getTitle().equals(title)) // Сравнение с помощью equals
-                    .findFirst() // Получаем первый найденный элемент
-                    .orElse(null); // Если не найдено, возвращаем null
+                    .filter(wall -> wall.getTitle().equals(title))
+                    .findFirst()
+                    .orElse(null);
 
             if (foundWall != null) {
-                Long id = foundWall.getId(); // Получаем идентификатор
-                return "redirect:/board";
-                //return "redirect:/board/" + id; // Переход на страницу доски
+                Long id = foundWall.getId();
+                model.addAttribute("id", id);// Получаем идентификатор
+                return "redirect:/board/" + id; // Переход на страницу доски
+            } else {
+                System.out.println("Доска не найдена с заголовком: " + title);
+                return "redirect:/folders"; // Или возвращаем на folders, если доска не найдена
             }
         }
         return "folders";
     }
+     */
 }

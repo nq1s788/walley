@@ -15,7 +15,7 @@
 <body>
 <form action="/folders" method="post">
     <div id="buttons-wrap">
-        <button type="submit" name="action" value="garden">
+        <button onclick="garden()" type="submit" name="action" value="garden" >
             <img src="/icons/garden.svg">
         </button>
     </div>
@@ -56,7 +56,9 @@
     </div>
 </form>
 <script  th:inline="javascript">
-
+    function garden() {
+    window.location.href = 'garden.html';
+}
 
     // тут надо загрузить доски пользователя, поля:
 
@@ -169,7 +171,52 @@
         renderTable();
     }
 
-function toBoard(e) {
+    function toBoard(e) {
+    const target = e.target;
+
+    if (
+        target.closest(".more-button") ||
+        target.closest(".more-buttons") ||
+        (target.tagName === "TD" && target.hasAttribute("contenteditable"))
+    ) {
+        return;
+    }
+
+    const row = target.closest("tr");
+    if (!row) return;
+    console.log("дошли до toboard");
+
+    const name = row.querySelector("td")?.textContent.trim() || "";
+    const boardInf = { name };
+
+    const params = new URLSearchParams();
+    params.append('title', name);
+    params.append('action', 'toBoard');
+
+    fetch('/folders', {
+        method: 'POST',
+        body: params
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Ошибка при запросе к серверу');
+        }
+        return response.json(); // Ожидаем JSON-ответ
+    })
+    .then(data => {
+        // Проверяем, если это ID доски
+        if (typeof data === 'number') {
+            window.location.href = "/board/" + data; // Переход на страницу доски по ID
+        } else {
+            console.error('Не удалось получить ID доски:', data);
+        }
+    })
+    .catch(error => {
+        console.error('Произошла ошибка:', error);
+    });
+}
+
+/*function toBoard(e) {
         const target = e.target;
 
         if (
@@ -182,6 +229,7 @@ function toBoard(e) {
 
         const row = target.closest("tr");
         if (!row) return;
+        console.log("дошли до toboard");
 
         const name = row.querySelector("td")?.textContent.trim() || "";
         //тут надо передать всю инфу по доске, пока передается тотлько имя
@@ -195,11 +243,17 @@ function toBoard(e) {
             method: 'POST',
             body: params
 
+        })
+        .then(() => {
+        window.location.href = "/board/" + id;
+        })
+        .catch(error => {
+            console.error('Произошла ошибка:', error);
         });
 
-        renderTable();
+        //renderTable();
     }
-
+*/
 
 
 
@@ -222,16 +276,21 @@ function toBoard(e) {
     params.append('title', newBoard.title);
     params.append('action', 'create');
 
-    fetch('/folders', {
+   fetch('/folders', {
         method: 'POST',
         body: params,
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
         }
     })
-    .then(() => {
-        // Если вы хотите обновить интерфейс сразу после отправки данных
-        boards = [[${boards}]];
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Ошибка при отправке данных на сервер');
+        }
+        return response.json();
+    })
+    .then(updatedBoards => {
+        boards = updatedBoards; // Обновляем массив досок
         renderTable(); // Обновляем таблицу
     })
     .catch(error => {
