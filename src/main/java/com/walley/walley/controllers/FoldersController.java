@@ -49,6 +49,7 @@ public class FoldersController {
     }
     @PostMapping("/folders")
     public ResponseEntity<?> goToNextPages(@RequestParam(required = false) String action,
+                                           @RequestParam(required = false) String wallid,
                                            @RequestParam(required = false) String title,
                                            HttpSession session) {
         MyUser currUser = (MyUser) session.getAttribute("user");
@@ -69,16 +70,9 @@ public class FoldersController {
         }
 
         if ("toBoard".equals(action)) {
-            List<Walls> boards = wallsRepository.findAllByEmail(currUser.getEmail());
-            Walls foundWall = boards.stream()
-                    .filter(wall -> wall.getTitle().equals(title))
-                    .findFirst()
-                    .orElse(null);
-
-            if (foundWall != null) {
-                Long id = foundWall.getId();
+            if (wallid != null) {
                 // Возвращаем идентификатор доски
-                return ResponseEntity.ok(id);
+                return ResponseEntity.ok(wallid);
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Доска не найдена");
             }

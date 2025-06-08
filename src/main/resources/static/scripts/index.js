@@ -1,4 +1,3 @@
-
 const errorBox = document.getElementById('errorBox');
 const registerButton = document.getElementById('register')
 const loginButton = document.getElementById('login')
