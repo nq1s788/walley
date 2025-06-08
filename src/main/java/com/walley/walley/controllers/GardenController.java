@@ -1,7 +1,6 @@
 package com.walley.walley.controllers;
 
-import com.walley.walley.models.UserSetting;
-import com.walley.walley.models.UserTimer;
+import com.walley.walley.models.*;
 import com.walley.walley.repo.MyUserRepository;
 import com.walley.walley.repo.UserSettingRepository;
 import com.walley.walley.repo.UserStatRepository;
@@ -14,6 +13,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 @Controller
 public class GardenController {
@@ -39,17 +40,16 @@ public class GardenController {
         if (session.getAttribute("user") == null) {
             return "redirect:/";
         }
-        //session.setAttribute("user", session.getAttribute("user"));
-        //session.setAttribute("userSetting", session.getAttribute("userSetting"));
-        //session.setAttribute("userStat", session.getAttribute("userStat"));
-        //session.setAttribute("userTimer", session.getAttribute("userTimer"));
-
-
-
-        //model.addAttribute("workDuration", session.getAttribute("userSetting").getWorkDuration());
-        //model.addAttribute("breakDuration", userSetting.getBreakDuration());
-        //model.addAttribute("isWork", userTimer.isWork());
-        //model.addAttribute("isRunning", userTimer.isRunning());
+        MyUser user = (MyUser) session.getAttribute("user");
+        UserSetting userSetting = (UserSetting) session.getAttribute("userSetting");
+        UserStat userStat = (UserStat) session.getAttribute("userStat");
+        UserTimer userTimer = (UserTimer) session.getAttribute("userTimer");
+        if (user != null) {
+            model.addAttribute("user", user);
+            model.addAttribute("userSetting", userSetting);
+            model.addAttribute("userStat", userStat);
+            model.addAttribute("userTimer", userTimer);
+        }
         return "garden";
     }
     @PostMapping("/garden")

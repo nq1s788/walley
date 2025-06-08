@@ -37,6 +37,7 @@ public class SettingController {
     public String setting(HttpSession session, Model model) {
         MyUser user = (MyUser) session.getAttribute("user");
         UserSetting setting = (UserSetting) session.getAttribute("userSetting");
+        System.out.println(setting.getUsername());
         UserStat stat = (UserStat) session.getAttribute("userStat");
         UserTimer timer = (UserTimer) session.getAttribute("userTimer");
         if (user != null) {
@@ -51,6 +52,7 @@ public class SettingController {
 
     @PostMapping("/settings")
     public String megaActions(@RequestParam String action,
+                              @RequestParam(required = false) String username,
                               @RequestParam(required = false) String password,
                               @RequestParam(required = false) Integer workInput,
                               @RequestParam(required = false) Integer restInput,
@@ -62,12 +64,17 @@ public class SettingController {
         if ("garden".equals(action)) {
             return "redirect:/garden";
         } else if ("save".equals(action)) {
-            if (password != null && !password.isBlank()) {
-                user.setPassword(password);
+            if (password != null) {
+                if(!password.isBlank()) {
+                    user.setPassword(password);
+                }
             }
             if (workInput != null && restInput != null) {
                 setting.setWorkDuration(Duration.ofMinutes(workInput));
                 setting.setBreakDuration(Duration.ofMinutes(restInput));
+            }
+            if (username != null && !username.isBlank()) {
+                setting.setUsername(username);
             }
             userRepository.save(user);
             session.setAttribute("user", user);

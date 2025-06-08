@@ -67,6 +67,7 @@ public class MainController {
             user.setUserSetting(userSetting);
             user.setUserStat(userStat);
             user.setUserTimer(userTimer);
+            System.out.println(userSetting.getUsername());
 
             //userSetting.setUser(user);
             //userStat.setUser(user);
