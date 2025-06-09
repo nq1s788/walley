@@ -36,16 +36,24 @@ public class BoardController {
     public String getBoard(@PathVariable Long id, HttpSession session, Model model) {
         MyUser user = (MyUser) session.getAttribute("user");
         if (user != null) {
-            Walls wall = wallsRepository.findByWallId(id);
-            List<Notes> notes = notesRepository.findAllByWallId(wall.getId());
-            List<Threads> threads = threadsRepository.findAllByWallId(wall.getId());
-            System.out.println(wall);
-            model.addAttribute("wall", wall);
-            model.addAttribute("notes", notes);
-            model.addAttribute("threads", threads);
-            model.addAttribute("user", user);
+            Optional<Walls> optionalWall = wallsRepository.findById(id);
+            if (optionalWall.isPresent()) {
+                Walls wall = optionalWall.get();
+                List<Notes> notes = notesRepository.findAllByWallId(wall.getId());
+                List<Threads> threads = threadsRepository.findAllByWallId(wall.getId());
+                Long lastWallId = notesRepository.findMaxId();
+                Long lastThreadId = threadsRepository.findMaxId();
+                System.out.println(wall);
+                model.addAttribute("wall", wall);
+                model.addAttribute("notes", notes);
+                model.addAttribute("threads", threads);
+                model.addAttribute("lastId", lastWallId);
+                model.addAttribute("lastThreadId", lastThreadId);
+
+                model.addAttribute("user", user);
+            }
         }
-        return "board/{id}";
+        return "board";
     }
     @PostMapping("/board/{id}")
     public String boardMain(@PathVariable Long id, HttpSession session, Model model,
@@ -53,7 +61,14 @@ public class BoardController {
                             @RequestParam(required = false) Walls wall,
                             @RequestParam(required = false) List<Notes> notes,
                             @RequestParam(required = false) List<Threads> threads) {
+        if ("garden".equals(action)) {
+            return "redirect:/garden";
+        } if ("folders".equals(action)) {
+            return "redirect:/folders";
+        }
         if ("update".equals(action)) {
+            System.out.println("дошли до обновления");
+            System.out.println(wall.getTitle());
             MyUser user = (MyUser) session.getAttribute("user");
             Walls old_wall = (Walls) session.getAttribute("wall");
             old_wall.setTitle(wall.getTitle());

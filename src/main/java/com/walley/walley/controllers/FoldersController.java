@@ -50,7 +50,7 @@ public class FoldersController {
     }
     @PostMapping("/folders")
     public ResponseEntity<?> goToNextPages(@RequestParam(required = false) String action,
-                                           @RequestParam(required = false) String wallid,
+                                           @RequestParam(required = false) Long wallid,
                                            @RequestParam(required = false) String title,
                                            HttpSession session) {
         MyUser currUser = (MyUser) session.getAttribute("user");

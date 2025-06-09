@@ -1,17 +1,10 @@
 
-let iFlower = localStorage.getItem('flower');
-console.log(iFlower)
-const flower = document.getElementById('flower')
-flower.innerHTML = `<img src="pic/${iFlower}.png">`
+//let iFlower = localStorage.getItem('flower');
+//console.log(iFlower)
+//const flower = document.getElementById('flower')
+//flower.innerHTML = `<img src="pic/${iFlower}.png">`
 
 
-const WORK_DURATION = 20 * 1;
-const BREAK_DURATION = 5 * 1;
-
-let isWork = true;
-let timeLeft = WORK_DURATION;
-let timerInterval = null;
-let isRunning = false;
 
 const timeDiv = document.getElementById('time');
 const nameDiv = document.getElementById('name');
