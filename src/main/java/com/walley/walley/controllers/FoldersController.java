@@ -22,6 +22,7 @@ import java.util.List;
 public class FoldersController {
     @Autowired
     private AppService service;
+    @Autowired
     private final WallsRepository wallsRepository;
 
     @Autowired
