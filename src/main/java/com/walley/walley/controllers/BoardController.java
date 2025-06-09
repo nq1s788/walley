@@ -40,12 +40,18 @@ public class BoardController {
                 List<Threads> threads = threadsRepository.findAllByWallId(wall.getId());
                 Long lastWallId = notesRepository.findMaxId();
                 Long lastThreadId = threadsRepository.findMaxId();
-                System.out.println(wall);
+                System.out.println(wall.getTitle());
                 model.addAttribute("wall", wall);
                 model.addAttribute("notes", notes);
                 model.addAttribute("threads", threads);
                 model.addAttribute("lastId", lastWallId);
                 model.addAttribute("lastThreadId", lastThreadId);
+
+                session.setAttribute("wall", wall);
+                session.setAttribute("notes", notes);
+                session.setAttribute("threads", threads);
+                session.setAttribute("lastId", lastWallId);
+                session.setAttribute("lastThreadId", lastThreadId);
 
                 model.addAttribute("user", user);
             }
@@ -69,14 +75,14 @@ public class BoardController {
         if ("update".equals(action)) {
             System.out.println("дошли до обновления");
             System.out.println(wall.getTitle());
-            MyUser user = (MyUser) model.getAttribute("user");
-            Walls old_wall = (Walls) model.getAttribute("wall");
+            MyUser user = (MyUser) session.getAttribute("user");
+            Walls old_wall = (Walls) session.getAttribute("wall");
             old_wall.setTitle(wall.getTitle());
             old_wall.setBackground(wall.getBackground());
             old_wall.setFont(wall.getFont());
             wallsRepository.save(old_wall);
 
-            List<Notes> old_notes = (List<Notes>) model.getAttribute("notes");
+            List<Notes> old_notes = (List<Notes>) session.getAttribute("notes");
             for (Notes old_note : old_notes) {
                 Boolean is_deleted = true;
                 for (Notes new_note : notes) {
@@ -107,7 +113,7 @@ public class BoardController {
                 }
             }
 
-            List<Threads> old_threads = (List<Threads>) model.getAttribute("threads");
+            List<Threads> old_threads = (List<Threads>) session.getAttribute("threads");
             for (Threads old_thread : old_threads) {
                 Boolean is_deleted = true;
                 for (Threads new_thread : threads) {
