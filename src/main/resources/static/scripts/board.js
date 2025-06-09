@@ -539,19 +539,29 @@
                       // открытие палитры для этой заметки
                       break;
                   case 'set-title':
-                      titleButton.firstChild.classList.toggle('off')
-                      note.querySelector('.note-title').classList.toggle('hidden')
-                      note.dataset.ish = String(!JSON.parse(note.dataset.ish));
+                      case 'set-title':
 
-                      // открыть input для ввода заголовка
-                      break;
-                  case 'set-time':
-                      timeButton.firstChild.classList.toggle('off')
+                                      note.dataset.ish = String(!JSON.parse(note.dataset.ish));
+                                      if (JSON.parse(note.dataset.ish)) {
+                                          titleButton.firstChild.classList.remove('off')
+                                          note.querySelector('.note-title').classList.remove('hidden')
+                                      } else {
+                                          titleButton.firstChild.classList.add('off')
+                                          note.querySelector('.note-title').classList.add('hidden')
+                                      }
 
-                      note.querySelector('.note-time').classList.toggle('hidden')
-                      note.dataset.ist = String(!JSON.parse(note.dataset.ist));
 
-                      // задать/отобразить время
+                                      // открыть input для ввода заголовка
+                                      break;
+                                  case 'set-time':
+                                      note.dataset.ist = String(!JSON.parse(note.dataset.ist));
+                                      if (JSON.parse(note.dataset.ist)) {
+                                          timeButton.firstChild.classList.remove('off')
+                                          note.querySelector('.note-time').classList.remove('hidden')
+                                      } else {
+                                          timeButton.firstChild.classList.add('off')
+                                          note.querySelector('.note-time').classList.add('hidden')
+                                      }
                       break;
                   case 'lower':
                       setNoteLower(note);
@@ -715,87 +725,173 @@
               });
           });
       }
-      function parseContent(note, type) {
-          if (type == 'textNote') {
-              const content = {
-                  title: note.querySelector('.note-title')?.textContent ?? '',
-                  main: note.querySelector('.note-main')?.textContent ?? '',
-                  time: note.querySelector('.note-time')?.textContent ?? ''
-              };
-              return content
-          }
-          if (type == 'listNote') {
-              const content = {
-                  title: note.querySelector('.note-title')?.textContent.trim() ?? '',
-                  items: Array.from(note.querySelectorAll('.note-num-item'))
-                      .map(li => li.textContent.trim()),
-                  time: note.querySelector('.note-time')?.textContent.trim() ?? ''
-              };
-              return content
 
-          }
-          if (type == 'toDoNote') {
-              const items = [];
-              const check = [];
+function parseContent(note, type) {
+    if (type == 'textNote') {
+        const content = {
+            title: note.querySelector('.note-title')?.textContent ?? '',
+            main: note.querySelector('.note-main')?.textContent ?? '',
+            time: note.querySelector('.note-time')?.textContent ?? ''
+        };
+        return content
+    }
+    if (type == 'listNote') {
+        const content = {
+            title: note.querySelector('.note-title')?.textContent.trim() ?? '',
+            items: Array.from(note.querySelectorAll('.note-num-item'))
+                .map(li => li.textContent.trim()),
+            time: note.querySelector('.note-time')?.textContent.trim() ?? ''
+        };
+        return content
 
-              note.querySelectorAll('.note-checkbox-item').forEach(li => {
-                  const span = li.querySelector('.checkbox-title');
-                  const text = span?.textContent.trim();
+    }
+    if (type == 'toDoNote') {
+        const items = [];
+        const check = [];
 
-                  items.push(text);
-                  check.push(li.classList.contains('checked'));
-              });
+        note.querySelectorAll('.note-checkbox-item').forEach(li => {
+            const span = li.querySelector('.checkbox-title');
+            const text = span?.textContent.trim();
 
-              const content = {
-                  title: note.querySelector('.note-title')?.textContent.trim() ?? '',
-                  items,
-                  check,
-                  time: note.querySelector('.note-time')?.textContent.trim() ?? ''
-              };
-              return content
-          }
-          return note.querySelector('.note-content').innerHTML;
-      }
+            items.push(text);
+            check.push(li.classList.contains('checked'));
+        });
 
-      function postWallJSONs() {
-          console.log("Действие выполнено:", new Date());
-          //console.log(notes)
-          //{id: , wallid:, NoteClass, dataX:, dataY:, color:, IsHeadline:, Istime:, content: }
-          const notesJSON = Array.from(notes).map(note => ({
-              id: note.id,
-              wallid: wallid,
-              NoteClass: note.classList[1],
-              dataX: note.dataset.x,
-              dataY: note.dataset.y,
-              color: getComputedStyle(note).background,
-              IsHeadline: note.dataset.ish,
-              Istime: note.dataset.ist,
-              content: parseContent(note, note.classList[1]),
-          }));
-          const threadsJSON = Array.from(threads).map(pair => ({
-              noteId1: pair.note1.id,
-              noteId2: pair.note2.id,
-              wallid: wallid,
-          }));;
-          const wallJSON = {
-              wallid: wallid,
-              email:1,
-              user:1,
-              title:1,
-              createdAt:1,
-              background: getComputedStyle(document.getElementById('board-container')).background,
-              font: getComputedStyle(document.body).fontFamily,
-              inPackage: false
-          };
+        const content = {
+            title: note.querySelector('.note-title')?.textContent.trim() ?? '',
+            items,
+            check,
+            time: note.querySelector('.note-time')?.textContent.trim() ?? ''
+        };
+        return content
+    }
+    return note.querySelector('.note-content').innerHTML;
+}
 
-
-          console.log(JSON.stringify(notesJSON, null, 2));
-          console.log(JSON.stringify(threadsJSON, null, 2));
-          console.log(JSON.stringify(wallJSON, null, 2));
+function postWallJSONs() {
+    console.log("Действие выполнено:", new Date());
+    //{id: , wallid:, NoteClass, dataX:, dataY:, color:, IsHeadline:, Istime:, content: }
+    const notesJSON = Array.from(notes).map(note => ({
+        id: note.id,
+        wallid: 1,
+        NoteClass: note.classList[1],
+        dataX: note.dataset.x,
+        dataY: note.dataset.y,
+        color: getComputedStyle(note).background,
+        IsHeadline: note.dataset.ish,
+        Istime: note.dataset.ist,
+        content: parseContent(note, note.classList[1]),
+    }));
+    const threadsJSON = Array.from(threads).map(pair => ({
+        noteId1: pair.note1.id,
+        noteId2: pair.note2.id,
+        wallid: 1,
+    }));;
+    const wallJSON = {
+        wallid: 1,
+        email: 1,
+        user: 1,
+        title: 1,
+        createdAt: 1,
+        background: getComputedStyle(document.getElementById('board-container')).background,
+        font: getComputedStyle(document.body).fontFamily,
+        inPackage: false
+    };
 
 
-          // fetch('/')
-      }
+    console.log(JSON.stringify(notesJSON, null, 2));
 
-      // запускать каждые 30000 мс (30 секунд)
-      setInterval(postWallJSONs, 30000);
+
+    // здесь любое другое действие, например:
+    // fetch('/update') или изменение DOM
+}
+
+// запускать каждые 30000 мс (30 секунд)
+setInterval(postWallJSONs, 30000);
+
+function addContent(noteJSON) {
+    if (noteJSON.NoteClass == 'textNote') {
+        textNote()
+        let note = notes[notes.length - 1];
+        note.querySelector('.note-main').textContent = noteJSON.content.main;
+
+    }
+    if (noteJSON.NoteClass == 'listNote') {
+        listNote()
+        let note = notes[notes.length - 1];
+        let list = note.querySelector('.note-list-items')
+        noteJSON.content.items.forEach(i => {
+            const newItem = document.createElement('li');
+            newItem.className = 'note-block note-num-item';
+            newItem.textContent = i;
+            newItem.contentEditable = true;
+            list.appendChild(newItem);
+        })
+    }
+    if (noteJSON.NoteClass == 'toDoNote') {
+        toDoNote()
+        let note = notes[notes.length - 1];
+        let list = note.querySelector('.note-list-items')
+        noteJSON.content.items.forEach((itemText, index) => {
+            const checked = noteJSON.content.check[index];
+
+            const li = document.createElement('li');
+            li.className = 'note-block';
+            li.classList.add('note-checkbox-item');
+
+            if (checked) li.classList.add('checked');
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.className = 'checkbox';
+
+            const span = document.createElement('span');
+            span.className = 'checkbox-title';
+            span.contentEditable = true;
+            span.textContent = itemText;
+
+            li.appendChild(checkbox);
+            li.appendChild(span);
+
+            list.appendChild(li);
+
+        })
+    }
+}
+
+if (notesJSON) {
+    notesJSON.forEach(noteCont => {
+        addContent(noteCont)
+        let note = notes[notes.length - 1];
+
+
+        note.dataset.x = noteCont.dataX;
+        note.dataset.y = noteCont.dataY;
+        note.style.background = noteCont.color;
+        note.dataset.ish = noteCont.IsHeadline;
+        note.dataset.ist = noteCont.Istime;
+        let titleButton = note.querySelector('.note-settings').children[1];
+        let timeButton = note.querySelector('.note-settings').children[2];
+
+
+        if (JSON.parse(note.dataset.ish)) {
+            titleButton.firstChild.classList.remove('off')
+            note.querySelector('.note-title').classList.remove('hidden')
+        } else {
+            titleButton.firstChild.classList.add('off')
+            note.querySelector('.note-title').classList.add('hidden')
+        }
+        if (JSON.parse(note.dataset.ist)) {
+            timeButton.firstChild.classList.remove('off')
+            note.querySelector('.note-time').classList.remove('hidden')
+        } else {
+            timeButton.firstChild.classList.add('off')
+            note.querySelector('.note-time').classList.add('hidden')
+        }
+
+
+        note.querySelector('.note-title').textContent = noteCont.content.title;
+        note.querySelector('.note-time').textContent = noteCont.content.time;
+        updateNotePosition(note);
+
+    })
+}
