@@ -773,7 +773,7 @@ function postWallJSONs() {
     //{id: , wallid:, NoteClass, dataX:, dataY:, color:, IsHeadline:, Istime:, content: }
     const notesJSON = Array.from(notes).map(note => ({
         id: note.id,
-        wallid: 1,
+        wallid: wallid,
         NoteClass: note.classList[1],
         dataX: note.dataset.x,
         dataY: note.dataset.y,
@@ -785,10 +785,12 @@ function postWallJSONs() {
     const threadsJSON = Array.from(threads).map(pair => ({
         noteId1: pair.note1.id,
         noteId2: pair.note2.id,
-        wallid: 1,
+        wallid: wallid,
     }));;
+            console.log(threads);
+
     const wallJSON = {
-        wallid: 1,
+        wallid: wallid,
         email: 1,
         user: 1,
         title: 1,
@@ -800,14 +802,20 @@ function postWallJSONs() {
 
 
     console.log(JSON.stringify(notesJSON, null, 2));
+        console.log(JSON.stringify(wallJSON, null, 2));
+    console.log(JSON.stringify(threadsJSON, null, 2));
 
 
-    // здесь любое другое действие, например:
-    // fetch('/update') или изменение DOM
+
+    // fetch('/')
 }
-
-// запускать каждые 30000 мс (30 секунд)
+// post
 setInterval(postWallJSONs, 30000);
+
+// get
+/*let wallJSON=[[${wall}]];
+let notesJSON=[[${notes}]];
+let threadsJSON =[[${threads}]];*/
 
 function addContent(noteJSON) {
     if (noteJSON.NoteClass == 'textNote') {
@@ -836,10 +844,8 @@ function addContent(noteJSON) {
             const checked = noteJSON.content.check[index];
 
             const li = document.createElement('li');
-            li.className = 'note-block';
-            li.classList.add('note-checkbox-item');
+            li.className = 'note-block note-checkbox-item';
 
-            if (checked) li.classList.add('checked');
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
             checkbox.className = 'checkbox';
@@ -848,6 +854,18 @@ function addContent(noteJSON) {
             span.className = 'checkbox-title';
             span.contentEditable = true;
             span.textContent = itemText;
+            if (checked) {
+                li.classList.add('checked');
+                checkbox.classList.add('checked')
+            }
+
+            checkbox.addEventListener('change', () => {
+                li.classList.toggle('checked', checkbox.checked);
+                span.contentEditable = !checkbox.checked;
+                if (!span.textContent && checkbox.checked) {
+                    span.contentEditable = checkbox.checked;
+                }
+            });
 
             li.appendChild(checkbox);
             li.appendChild(span);
@@ -857,7 +875,11 @@ function addContent(noteJSON) {
         })
     }
 }
+if (wallJSON){
+    document.getElementById('board-container').style.background = wallJSON.background;
+    document.body.fontFamily = wallJSON.font;
 
+}
 if (notesJSON) {
     notesJSON.forEach(noteCont => {
         addContent(noteCont)
@@ -893,5 +915,13 @@ if (notesJSON) {
         note.querySelector('.note-time').textContent = noteCont.content.time;
         updateNotePosition(note);
 
-    })
+    });
+}
+if (threadsJSON) {
+    threadsJSON.forEach(thread => {
+        createThread(document.getElementById(thread.noteId1), document.getElementById(thread.noteId2));
+        console.log('нитка', thread);
+    });
+
+    updateThreads();
 }
