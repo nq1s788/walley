@@ -15,7 +15,6 @@
 </head>
 
 <body>
-<form action="/board" method="post">
     <div id="menu">
 
         <div id="top-menu">
@@ -76,11 +75,14 @@
             <button data-action="share"><img src="/icons/share.svg"></button>
         </div>
         <div id="name-board" contenteditable="true">Новая доска</div>
+        <form action="/" method="post" id="formPost">
+
         <div id="out-settings">
-            <button onclick="garden()"><img src="/icons/garden.svg"></button>
-            <button><img onclick="folders()" src="/icons/folders.svg" style="width: 93%;"></button>
+            <button type="submit" name="action" value="garden"><img src="/icons/garden.svg" ></button>
+            <button type="submit" name="action" value="folders"><img src="/icons/folders.svg" style="width: 93%;"></button>
 
         </div>
+        </form>
 
     </div>
 
@@ -89,8 +91,7 @@
             <canvas id="linesCanvas"></canvas>
         </div>
     </div>
-</form>
-    <script src="/scripts/board.js"></script>
+<script src="/scripts/board.js"></script>
 </body>
 
 </html>
