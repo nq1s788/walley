@@ -9,10 +9,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -57,10 +54,13 @@ public class BoardController {
     }
     @PostMapping("/board/{id}")
     public String boardMain(@PathVariable Long id, HttpSession session, Model model,
-                            @RequestParam(required = false) String action,
-                            @RequestParam(required = false) Walls wall,
-                            @RequestParam(required = false) List<Notes> notes,
-                            @RequestParam(required = false) List<Threads> threads) {
+                            @RequestBody BoardRequest request) {
+        String action = request.getAction();
+        Walls wall = request.getWall();
+        List<Notes> notes = request.getNotes();
+        List<Threads> threads = request.getThreads();
+
+        System.out.println("Received action: " + action);
         if ("garden".equals(action)) {
             return "redirect:/garden";
         } if ("folders".equals(action)) {
@@ -69,14 +69,14 @@ public class BoardController {
         if ("update".equals(action)) {
             System.out.println("дошли до обновления");
             System.out.println(wall.getTitle());
-            MyUser user = (MyUser) session.getAttribute("user");
-            Walls old_wall = (Walls) session.getAttribute("wall");
+            MyUser user = (MyUser) model.getAttribute("user");
+            Walls old_wall = (Walls) model.getAttribute("wall");
             old_wall.setTitle(wall.getTitle());
             old_wall.setBackground(wall.getBackground());
             old_wall.setFont(wall.getFont());
             wallsRepository.save(old_wall);
 
-            List<Notes> old_notes = (List<Notes>) session.getAttribute("notes");
+            List<Notes> old_notes = (List<Notes>) model.getAttribute("notes");
             for (Notes old_note : old_notes) {
                 Boolean is_deleted = true;
                 for (Notes new_note : notes) {
@@ -107,7 +107,7 @@ public class BoardController {
                 }
             }
 
-            List<Threads> old_threads = (List<Threads>) session.getAttribute("threads");
+            List<Threads> old_threads = (List<Threads>) model.getAttribute("threads");
             for (Threads old_thread : old_threads) {
                 Boolean is_deleted = true;
                 for (Threads new_thread : threads) {
@@ -133,9 +133,5 @@ public class BoardController {
         }
         return "board";
     }
-
-
-
-
 
 }
