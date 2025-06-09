@@ -136,8 +136,7 @@ let wallJSON =
                            : 1;
 
       //const boardInf = JSON.parse(localStorage.getItem('boardInf'));
-      //let boardName = document.getElementById('name-board');
-      //boardName.textContent = boardInf.name;
+      let boardName = document.getElementById('name-board');
 
       function folders() {
           window.location.href = 'folders.html';
@@ -885,7 +884,7 @@ function postWallJSONs() {
         wallid: wallid,
         email: wallJSON.email,
         user: wallJSON.user,
-        title: wallJSON.title,
+        title: boardName.textContent,
         createdAt: wallJSON.createdAt,
         background: getComputedStyle(document.getElementById('board-container')).background,
         font: getComputedStyle(document.body).fontFamily,
@@ -974,6 +973,7 @@ function addContent(noteJSON) {
 if (wallJSON){
     document.getElementById('board-container').style.background = wallJSON.background;
     document.body.fontFamily = wallJSON.font;
+    boardName.textContent = wallJSON.title;
 
 }
 if (notesJSON) {
