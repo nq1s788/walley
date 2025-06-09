@@ -1,3 +1,82 @@
+let notesJSON =
+[
+  {
+    "id": "4",
+    "wallid": "2",
+    "NoteClass": "textNote",
+    "dataX": "120",
+    "dataY": "416",
+    "color": "rgb(231, 200, 195)",
+    "IsHeadline": "true",
+    "Istime": "false",
+    "content": "{\"title\":\"Заголовок\",\"main\":\"grdgesdef\\nsgsgedsgedsf\\ngdsgsd\",\"time\":\"00:31 10.06.25\"}"
+  },
+  {
+    "id": "5",
+    "wallid": "2",
+    "NoteClass": "textNote",
+    "dataX": "581",
+    "dataY": "492",
+    "color": "rgb(243, 239, 201)",
+    "IsHeadline": "false",
+    "Istime": "true",
+    "content": "{\"title\":\"Заголовок\",\"main\":\"lsgjrkgfgndkjgfnrjd,gbfjdg\",\"time\":\"00:31 10.06.25\"}"
+  },
+  {
+    "id": "6",
+    "wallid": "2",
+    "NoteClass": "toDoNote",
+    "dataX": "573",
+    "dataY": "130",
+    "color": "rgb(197, 219, 179)",
+    "IsHeadline": "false",
+    "Istime": "false",
+    "content": "{\"title\":\"Заголовок\",\"items\":[\"edsgdes\",\"ggrgregf\",\"hrdfgrdgfg\"],\"check\":[false,false,false],\"time\":\"00:31 10.06.25\"}"
+  },
+  {
+    "id": "7",
+    "wallid": "2",
+    "NoteClass": "textNote",
+    "dataX": "196",
+    "dataY": "116",
+    "color": "rgb(199, 207, 220)",
+    "IsHeadline": "true",
+    "Istime": "false",
+    "content": "{\"title\":\"Заголовок\",\"main\":\"grgesfliedsohfvnd\",\"time\":\"00:32 10.06.25\"}"
+  }
+];
+let threadsJSON =
+[
+  {
+    "noteId1": "4",
+    "noteId2": "6",
+    "wallid": "2",
+    "id": 2
+  },
+  {
+    "noteId1": "5",
+    "noteId2": "6",
+    "wallid": "2",
+    "id": 3
+  },
+  {
+    "noteId1": "7",
+    "noteId2": "5",
+    "wallid": "2",
+    "id": 4
+  }
+];
+let wallJSON =
+{
+  "wallid": "2",
+  "email": 1,
+  "user": 1,
+  "title": 1,
+  "createdAt": 1,
+  "background": "rgb(250, 248, 236)",
+  "font": "\"Montserrat\"",
+  "inPackage": false
+};
 
         window.addEventListener("DOMContentLoaded", () => {
             const idFromUrl = window.location.pathname.split("/").pop();
@@ -49,7 +128,12 @@
       let selectImage = document.getElementById('select-image');
       let imageInput = document.getElementById('image-input');
 
-      let lastId = 1;
+      let lastId = notesJSON.length
+                     ? Math.max(...notesJSON.map(item => Number(item.id)))
+                     : 1;
+      let lastThreadId = threadsJSON.length
+                           ? Math.max(...threadsJSON.map(item => Number(item.id)))
+                           : 1;
 
       //const boardInf = JSON.parse(localStorage.getItem('boardInf'));
       //let boardName = document.getElementById('name-board');
@@ -71,33 +155,45 @@
           document.querySelector(`#menu button[data-action="${tool}"]`)?.classList.add("active-tool");
       }
 
-      function textNote() {
+      function typeNoteWrap(type){
+          if(type == 1){
+              textNote(++lastId);
+          }
+          if(type == 2){
+              listNote(++lastId);
+          }
+          if(type == 3){
+              toDoNote(++lastId);
+          }
+      }
+
+      function textNote(id) {
           let noteHTML =
               `   <div class="note-block note-title" contenteditable="true">Заголовок</div>
           <div class="note-block note-main" contenteditable="true"><br></div>
           <div class="note-block note-time" contenteditable="true"></div>`;
           let noteType = 'textNote';
-          createNote(noteHTML, noteType);
+          createNote(noteHTML, noteType, id);
       }
 
-      function listNote() {
+      function listNote(id) {
           let noteHTML =
               `   <div class="note-block note-title" contenteditable="true">Заголовок</div>
           <ol class="note-list-items"></ol>
           <div class="add-item">+</div>
           <div class="note-block note-time" contenteditable="true"></div>`;
           let noteType = 'listNote';
-          createNote(noteHTML, noteType);
+          createNote(noteHTML, noteType, id);
       }
 
-      function toDoNote() {
+      function toDoNote(id) {
           let noteHTML =
               `   <div class="note-block note-title" contenteditable="true">Заголовок</div>
           <ul class="note-list-items"></ul>
           <div class="add-item">+</div>
           <div class="note-block note-time" contenteditable="true"></div>`;
           let noteType = 'toDoNote';
-          createNote(noteHTML, noteType);
+          createNote(noteHTML, noteType, id);
       }
 
       imageInput.addEventListener('change', () => {
@@ -236,10 +332,9 @@
           threads = threads.filter(thread => thread.note1.id !== id && thread.note2.id !== id);
       }
 
-      function createNote(noteHTML, noteType) {
+      function createNote(noteHTML, noteType, id) {
           let note = document.createElement('div');
-          note.id = lastId;
-          lastId++;
+          note.id = id;
           note.setAttribute('data-isH', true);
           note.setAttribute('data-isT', false);
           let noteContent = document.createElement('div');
@@ -340,24 +435,21 @@
               if (!startNote) {
                   startNote = note;
               } else {
-                  createThread(startNote, note);
+                  if(startNote.id != note.id) createThread(startNote, note, lastThreadId++);
                   startNote = null;
               }
           }
       }
 
-      function createThread(note1, note2) {
-          if (note1.id == note2.id) {
-              return;
-          }
-          threads.push({ note1, note2 });
+      function createThread(note1, note2, id) {
+          threads.push({ note1, note2, id});
           updateThreads();
       }
 
       function updateThreads() {
           resizeCanvas();
           ctx.clearRect(0, 0, canvas.width, canvas.height);
-          threads.forEach(({ note1, note2 }) => {
+          threads.forEach(({ note1, note2, id }) => {
               ctx.beginPath();
               //console.log(note1.offsetLeft + note1.offsetWidth / 2, note1.offsetTop + note1.offsetHeight / 2, note2.offsetLeft + note2.offsetWidth / 2, note2.offsetTop + note2.offsetHeight / 2);
               ctx.moveTo(note1.offsetLeft + note1.offsetWidth / 2, note1.offsetTop + note1.offsetHeight / 2);
@@ -780,21 +872,21 @@ function postWallJSONs() {
         color: getComputedStyle(note).background,
         IsHeadline: note.dataset.ish,
         Istime: note.dataset.ist,
-        content: parseContent(note, note.classList[1]),
+        content: JSON.stringify(parseContent(note, note.classList[1])),
     }));
     const threadsJSON = Array.from(threads).map(pair => ({
         noteId1: pair.note1.id,
         noteId2: pair.note2.id,
         wallid: wallid,
+        id: pair.id
     }));;
-            console.log(threads);
 
-    const wallJSON = {
+    const wallJSON_new = {
         wallid: wallid,
-        email: 1,
-        user: 1,
-        title: 1,
-        createdAt: 1,
+        email: wallJSON.email,
+        user: wallJSON.user,
+        title: wallJSON.title,
+        createdAt: wallJSON.createdAt,
         background: getComputedStyle(document.getElementById('board-container')).background,
         font: getComputedStyle(document.body).fontFamily,
         inPackage: false
@@ -802,8 +894,9 @@ function postWallJSONs() {
 
 
     console.log(JSON.stringify(notesJSON, null, 2));
-        console.log(JSON.stringify(wallJSON, null, 2));
-    console.log(JSON.stringify(threadsJSON, null, 2));
+        console.log(JSON.stringify(threadsJSON, null, 2));
+
+    console.log(JSON.stringify(wallJSON_new, null, 2));
 
 
 
@@ -818,17 +911,20 @@ let notesJSON=[[${notes}]];
 let threadsJSON =[[${threads}]];*/
 
 function addContent(noteJSON) {
+        noteContParse = JSON.parse(noteJSON.content);
+
     if (noteJSON.NoteClass == 'textNote') {
-        textNote()
+        textNote(noteJSON.id);
+        console.log(noteJSON.id);
         let note = notes[notes.length - 1];
-        note.querySelector('.note-main').textContent = noteJSON.content.main;
+        note.querySelector('.note-main').textContent = noteContParse.main;
 
     }
     if (noteJSON.NoteClass == 'listNote') {
-        listNote()
+        listNote(noteJSON.id)
         let note = notes[notes.length - 1];
         let list = note.querySelector('.note-list-items')
-        noteJSON.content.items.forEach(i => {
+        noteContParse.items.forEach(i => {
             const newItem = document.createElement('li');
             newItem.className = 'note-block note-num-item';
             newItem.textContent = i;
@@ -837,11 +933,11 @@ function addContent(noteJSON) {
         })
     }
     if (noteJSON.NoteClass == 'toDoNote') {
-        toDoNote()
+        toDoNote(noteJSON.id)
         let note = notes[notes.length - 1];
         let list = note.querySelector('.note-list-items')
-        noteJSON.content.items.forEach((itemText, index) => {
-            const checked = noteJSON.content.check[index];
+        noteContParse.items.forEach((itemText, index) => {
+            const checked = noteContParse.check[index];
 
             const li = document.createElement('li');
             li.className = 'note-block note-checkbox-item';
@@ -882,7 +978,10 @@ if (wallJSON){
 }
 if (notesJSON) {
     notesJSON.forEach(noteCont => {
-        addContent(noteCont)
+        noteContParse = JSON.parse(noteCont.content);
+        console.log(noteContParse);
+        addContent(noteCont);
+
         let note = notes[notes.length - 1];
 
 
@@ -911,15 +1010,15 @@ if (notesJSON) {
         }
 
 
-        note.querySelector('.note-title').textContent = noteCont.content.title;
-        note.querySelector('.note-time').textContent = noteCont.content.time;
+        note.querySelector('.note-title').textContent = noteContParse.title;
+        note.querySelector('.note-time').textContent = noteContParse.time;
         updateNotePosition(note);
 
     });
 }
 if (threadsJSON) {
     threadsJSON.forEach(thread => {
-        createThread(document.getElementById(thread.noteId1), document.getElementById(thread.noteId2));
+        createThread(document.getElementById(thread.noteId1), document.getElementById(thread.noteId2), thread.id);
         console.log('нитка', thread);
     });
 
