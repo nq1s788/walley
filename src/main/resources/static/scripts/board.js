@@ -86,6 +86,17 @@ let wallJSON =
 
   form.action = `/board/${idFromUrl}`;
   console.log(form.action);
+
+  let boardName = document.getElementById('name-board');
+        console.log(boardName);
+        boardName.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") {
+              e.preventDefault(); // отменяет перенос строки
+              wallJSON.title = boardName.textContent.trim(); // сохранить значение, если нужно
+              boardName.blur(); // необязательно: убирает фокус
+              console.log(boardName.textContent);
+
+            }
         });
 
       let tool = 'move';
@@ -136,7 +147,7 @@ let wallJSON =
                            : 1;
 
       //const boardInf = JSON.parse(localStorage.getItem('boardInf'));
-      let boardName = document.getElementById('name-board');
+
 
       function folders() {
           window.location.href = 'folders.html';
@@ -884,7 +895,7 @@ function postWallJSONs() {
         wallid: wallid,
         email: wallJSON.email,
         user: wallJSON.user,
-        title: boardName.textContent,
+        title: boardName.textContent.trim(),
         createdAt: wallJSON.createdAt,
         background: getComputedStyle(document.getElementById('board-container')).background,
         font: getComputedStyle(document.body).fontFamily,
