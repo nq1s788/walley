@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 @Table(name = "threads")
 public class Threads {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "threadID", nullable = false, unique = true)
     private Long id;
 
@@ -21,6 +21,17 @@ public class Threads {
     private int noteId1;
     @Column(name = "noteID2")
     private int noteId2;
+
+    @Version
+    private Integer version;
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
 
     public Threads() {
     }

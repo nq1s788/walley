@@ -84,15 +84,20 @@ public class BoardController {
                 old_wall.get().setTitle(wall.getTitle());
                 old_wall.get().setBackground(wall.getBackground());
                 old_wall.get().setFont(wall.getFont());
-                //wallsRepository.save(old_wall);
+                wallsRepository.save(old_wall.get());
+                System.out.println("сохранили доску");
             }
 
 
             List<Notes> old_notes = (List<Notes>) session.getAttribute("notes");
+            if (old_notes.isEmpty()) {
+                System.out.println("нет старых заметок");
+            }
             for (Notes old_note : old_notes) {
                 Boolean is_deleted = true;
                 for (Notes new_note : notes) {
                     if (old_note.getId().equals(new_note.getId())) {
+                        System.out.println("пытаемся заменить заметку");
                         is_deleted = false;
                         old_note.setColor(new_note.getColor());
                         old_note.setContent(new_note.getContent());
@@ -101,10 +106,13 @@ public class BoardController {
                         old_note.setIstime(new_note.isIstime());
                         old_note.setHeadline(new_note.isHeadline());
                         notesRepository.save(old_note);
+                        System.out.println("заменили заметку");
                     }
                 }
                 if (is_deleted) {
+                    System.out.println("пытаемся удалить заметку");
                     notesRepository.deleteById(old_note.getId());
+                    System.out.println("удалили заметку");
                 }
             }
             for (Notes new_note : notes) {
@@ -115,7 +123,19 @@ public class BoardController {
                     }
                 }
                 if (is_new) {
-                    notesRepository.save(new_note);
+                    System.out.println("пытаемся добавить заметку");
+                    System.out.println(new_note.getId());
+                    System.out.println(new_note.getNoteClass());
+                    System.out.println(new_note.getContent());
+                    System.out.println(new_note.getColor());
+                    System.out.println(new_note.getDataX());
+                    System.out.println(new_note.getDataY());
+                    if (!notesRepository.existsById(new_note.getId())) {
+                        new_note.setVersion(null);
+                        System.out.println("ща положит");
+                        notesRepository.save(new_note);
+                    }
+                    System.out.println("добавили заметку");
                 }
             }
 
@@ -139,7 +159,10 @@ public class BoardController {
                     }
                 }
                 if (is_new) {
-                    threadsRepository.save(new_thread);
+                    if (!threadsRepository.existsById(new_thread.getId())) {
+                        new_thread.setVersion(null);
+                        threadsRepository.save(new_thread);
+                    }
                 }
             }
         }
