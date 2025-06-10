@@ -37,11 +37,11 @@ public class BoardController {
             if (optionalWall.isPresent()) {
                 Walls wall = optionalWall.get();
                 System.out.println(wall.getId());
-                List<Notes> notes = notesRepository.findAllByWallId(wall.getId());
-                List<Threads> threads = threadsRepository.findAllByWallId(wall.getId());
+                List<Notes> notes = notesRepository.findNotesByWallIdNative(wall.getId());
+                List<Threads> threads = threadsRepository.findThreadsByWallIdNative(wall.getId());
                 Long lastWallId = notesRepository.findMaxId();
                 Long lastThreadId = threadsRepository.findMaxId();
-                System.out.println(wall.getTitle());
+                System.out.println(threads.size());
                 model.addAttribute("wall", wall);
                 model.addAttribute("notes", notes);
                 model.addAttribute("threads", threads);
@@ -89,7 +89,7 @@ public class BoardController {
             }
 
 
-            List<Notes> old_notes = notesRepository.findAllByWallId(old_wall.get().getId());
+            List<Notes> old_notes = notesRepository.findNotesByWallIdNative(old_wall.get().getId());
             if (old_notes.isEmpty()) {
                 System.out.println("нет старых заметок");
             }
@@ -140,7 +140,7 @@ public class BoardController {
                 }
             }
 
-            List<Threads> old_threads = threadsRepository.findAllByWallId(old_wall.get().getId());
+            List<Threads> old_threads = threadsRepository.findThreadsByWallIdNative(old_wall.get().getId());
             for (Threads old_thread : old_threads) {
                 Boolean is_deleted = true;
                 for (Threads new_thread : threads) {

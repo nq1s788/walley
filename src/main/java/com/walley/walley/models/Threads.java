@@ -10,11 +10,11 @@ public class Threads {
     @Column(name = "threadID", nullable = false, unique = true)
     private Long id;
 
-    @Column(name = "wallID")
+    @Column(name = "wallid")
     private Long wallId;
 
     @ManyToOne
-    @JoinColumn(name = "wallID", referencedColumnName = "wallID", insertable = false, updatable = false)
+    @JoinColumn(name = "wallid", referencedColumnName = "wallid", insertable = false, updatable = false)
     private Walls wall;
 
     @Column(name = "noteID1")
