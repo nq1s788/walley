@@ -66,7 +66,7 @@
     const userSetting = [[${userSetting}]];
 
 
-    console.log(boards); // Проверка данных
+    console.log('ДОСКИЭЭЭ', boards); // Проверка данных
     console.log(userSetting); // Проверка настроек пользователя
 
     let sortField = null;
@@ -276,10 +276,20 @@
     searchInput.addEventListener("input", renderTable);
 
     addButton.addEventListener("click", (e) => {
-     e.preventDefault();
+    e.preventDefault();
     const now = new Date();
-    const date = now.toLocaleDateString("ru-RU").slice(0, 8);
-    const createdAt = now.toLocaleTimeString("ru-RU", { hour: '2-digit', minute: '2-digit' });
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0'); // Месяцы 0-11, добавляем 1
+    const day = String(now.getDate()).padStart(2, '0');
+
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+
+    const formattedDate = `${year}.${month}.${day}`;
+    const formattedTime = `${hours}:${minutes}`;
+    const createdAt = `${formattedDate} ${formattedTime}`;
+
+    console.log(createdAt);
 
     const newBoard = {
         title: `Новая доска ${boardCounter++}`,
@@ -290,6 +300,7 @@
 
     const params = new URLSearchParams();
     params.append('title', newBoard.title);
+    params.append('createdAt' ,newBoard.createdAt);
     params.append('action', 'create');
 
    fetch('/folders', {
