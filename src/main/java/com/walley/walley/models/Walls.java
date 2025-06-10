@@ -25,7 +25,7 @@ public class Walls {
     @Column(name = "createdAt")
     private java.sql.Timestamp createdAt;
     @Column(name = "background")
-    private String background = "#4F4242";
+    private String background = "rgb(250, 248, 236)";
     @Column(name = "font")
     private String font ="Montserrat";
     @Column(name = "inPackage")
