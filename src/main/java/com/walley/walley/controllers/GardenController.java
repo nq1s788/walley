@@ -44,11 +44,13 @@ public class GardenController {
         UserSetting userSetting = (UserSetting) session.getAttribute("userSetting");
         UserStat userStat = (UserStat) session.getAttribute("userStat");
         UserTimer userTimer = (UserTimer) session.getAttribute("userTimer");
+        Boolean newUser = (Boolean) session.getAttribute("newUser");
         if (user != null) {
             model.addAttribute("user", user);
             model.addAttribute("userSetting", userSetting);
             model.addAttribute("userStat", userStat);
             model.addAttribute("userTimer", userTimer);
+            model.addAttribute("newUser", newUser);
         }
         return "garden";
     }
