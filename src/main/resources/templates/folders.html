@@ -129,8 +129,8 @@
 
             actions.querySelector(".delete-btn").addEventListener("click", () => {
                 //boards.splice(index, 1);
-                const target = e.target;
-                const row = target.closest("tr");
+                //const target = e.target;
+                //const row = target.closest("tr");
 
                 if (!row) return;
                 const wallid = row.dataset.wallid;
@@ -156,7 +156,7 @@
             });
 
             actions.querySelector(".rename-btn").addEventListener("click", () => {
-                const target = e.target;
+                //const target = e.target;
                 titleCell.contentEditable = true;
                 titleCell.focus();
 
@@ -253,13 +253,10 @@
         }
         return response.json(); // Ожидаем JSON-ответ
     })
-    .then(data => {
-        // Проверяем, если это ID доски
-        if (typeof data === 'number') {
-            window.location.href = "/board/" + data; // Переход на страницу доски по ID
-        } else {
-            console.error('Не удалось получить ID доски:', data);
-        }
+    .then(updatedBoards => {
+        boards = updatedBoards; // Обновляем массив досок
+        //renderTable(); // Обновляем таблицу
+        location.reload();
     })
     .catch(error => {
         console.error('Произошла ошибка:', error);
