@@ -99,3 +99,8 @@ button:hover {
     position: absolute;
     left: 500px;
 }
+
+.flower {
+            position: absolute;
+            transform-origin: bottom center;
+        }
