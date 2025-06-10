@@ -17,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class FoldersController {
@@ -72,8 +73,35 @@ public class FoldersController {
 
         if ("toBoard".equals(action)) {
             if (wallid != null) {
-                // Возвращаем идентификатор доски
                 return ResponseEntity.ok(wallid);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Доска не найдена");
+            }
+        }
+
+        if ("delete".equals(action)) {
+            System.out.println("добрались до делита");
+            if (wallid != null) {
+                wallsRepository.deleteById(wallid);
+                List<Walls> boards = wallsRepository.findAllByEmail(currUser.getEmail());
+                return ResponseEntity.ok(boards);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Доска не найдена");
+            }
+        }
+
+        if ("rename".equals(action)) {
+            if (wallid != null) {
+                Optional<Walls> optionalBoard = wallsRepository.findById(wallid);
+                if (optionalBoard.isPresent()) {
+                    Walls board = optionalBoard.get();
+                    board.setTitle(title);
+                    wallsRepository.save(board);
+                    List<Walls> boards = wallsRepository.findAllByEmail(currUser.getEmail());
+                    return ResponseEntity.ok(boards);
+                } else {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Доска не найдена");
+                }
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Доска не найдена");
             }

@@ -128,11 +128,35 @@
             });
 
             actions.querySelector(".delete-btn").addEventListener("click", () => {
-                boards.splice(index, 1);
+                //boards.splice(index, 1);
+                const target = e.target;
+                const row = target.closest("tr");
+
+                if (!row) return;
+                const wallid = row.dataset.wallid;
+
+                const params = new URLSearchParams();
+                params.append('wallid', wallid);
+                params.append('action', 'delete');
+
+                fetch('/folders', {
+                    method: 'POST',
+                    body: params
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Ошибка при запросе к серверу');
+                        }
+                        return response.json();
+                    })
+                    .catch(error => {
+                        console.error('Произошла ошибка:', error);
+                    });
                 renderTable();
             });
 
             actions.querySelector(".rename-btn").addEventListener("click", () => {
+                const target = e.target;
                 titleCell.contentEditable = true;
                 titleCell.focus();
 
@@ -141,6 +165,29 @@
                         e.preventDefault();
                         board.title = titleCell.textContent.trim();
                         titleCell.removeAttribute("contentEditable");
+
+                        const row = target.closest("tr");
+                        if (!row) return;
+                        const wallid = row.dataset.wallid;
+
+                        const params = new URLSearchParams();
+                        params.append('wallid', wallid);
+                        params.append('title', title);
+                        params.append('action', 'rename');
+
+                        fetch('/folders', {
+                            method: 'POST',
+                            body: params
+                        })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Ошибка при запросе к серверу');
+                                }
+                                return response.json();
+                            })
+                            .catch(error => {
+                                console.error('Произошла ошибка:', error);
+                            });
                     }
                 });
             });
