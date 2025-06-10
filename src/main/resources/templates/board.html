@@ -120,6 +120,10 @@
       let wallJSON=[[${wall}]];
       let notesJSON=[[${notes}]];
       let threadsJSON =[[${threads}]];
+      console.log(wallJSON);
+            console.log(notesJSON);
+      console.log(threadsJSON);
+
 
         let boardName = document.getElementById('name-board');
         console.log(boardName);
@@ -892,16 +896,16 @@ function parseContent(note, type) {
 
 function postWallJSONs() {
     console.log("Действие выполнено:", new Date());
-    //{id: , wallid:, NoteClass, dataX:, dataY:, color:, IsHeadline:, Istime:, content: }
+    //{id: , wallid:, NoteClass, dataX:, dataY:, color:, headline:, Istime:, content: }
     const notesJSON = Array.from(notes).map(note => ({
         id: note.id,
         wallid: wallid,
-        NoteClass: note.classList[1],
+        noteClass: note.classList[1],
         dataX: Math.floor(note.dataset.x),
         dataY: Math.floor(note.dataset.y),
         color: getComputedStyle(note).background,
-        IsHeadline: note.dataset.ish,
-        Istime: note.dataset.ist,
+        headline: note.dataset.ish,
+        istime: note.dataset.ist,
         content: JSON.stringify(parseContent(note, note.classList[1])),
     }));
     const threadsJSON = Array.from(threads).map(pair => ({
@@ -958,14 +962,14 @@ setInterval(postWallJSONs, 30000);
 function addContent(noteJSON) {
         noteContParse = JSON.parse(noteJSON.content);
 
-    if (noteJSON.NoteClass == 'textNote') {
+    if (noteJSON.noteClass == 'textNote') {
         textNote(noteJSON.id);
         console.log(noteJSON.id);
         let note = notes[notes.length - 1];
         note.querySelector('.note-main').textContent = noteContParse.main;
 
     }
-    if (noteJSON.NoteClass == 'listNote') {
+    if (noteJSON.noteClass == 'listNote') {
         listNote(noteJSON.id)
         let note = notes[notes.length - 1];
         let list = note.querySelector('.note-list-items')
@@ -977,7 +981,7 @@ function addContent(noteJSON) {
             list.appendChild(newItem);
         })
     }
-    if (noteJSON.NoteClass == 'toDoNote') {
+    if (noteJSON.noteClass == 'toDoNote') {
         toDoNote(noteJSON.id)
         let note = notes[notes.length - 1];
         let list = note.querySelector('.note-list-items')
@@ -1035,8 +1039,8 @@ if (notesJSON) {
         note.dataset.x = noteCont.dataX;
         note.dataset.y = noteCont.dataY;
         note.style.background = noteCont.color;
-        note.dataset.ish = noteCont.IsHeadline;
-        note.dataset.ist = noteCont.Istime;
+        note.dataset.ish = noteCont.headline;
+        note.dataset.ist = noteCont.istime;
         let titleButton = note.querySelector('.note-settings').children[1];
         let timeButton = note.querySelector('.note-settings').children[2];
 
