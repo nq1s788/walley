@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <title>Walley - Cад</title>
     <link
-        href="https://fonts.googleapis.com/css2?family=Bad+Script&family=Bitter:ital,wght@0,100..900;1,100..900&family=Comfortaa:wght@300..700&family=Jost:ital,wght@0,100..900;1,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
-        rel="stylesheet">
+            href="https://fonts.googleapis.com/css2?family=Bad+Script&family=Bitter:ital,wght@0,100..900;1,100..900&family=Comfortaa:wght@300..700&family=Jost:ital,wght@0,100..900;1,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+            rel="stylesheet">
 
     <link rel="stylesheet" type="text/css" media="all" href="/css/garden.css">
 </head>
@@ -22,7 +22,7 @@
         </button>
     </div>
 </form>
-    <form action="/garden" method="get">
+<form action="/garden" method="get">
     <div id="timer">
         <div id="name"> Работа</div>
         <div id="circle">
@@ -31,93 +31,235 @@
         </div>
         <div id="time">00:00 </div>
     </div>
+    <div id="flower"></div>
+
 </form>
-    <script th:inline="javascript">
-        const userSetting = [[${userSetting}]];
-        console.log(userSetting);
+<script th:inline="javascript">
+    const userSetting = [[${ userSetting }]];
+    console.log(userSetting);
+    const WORK_DURATION = 20 * 60;
+    const BREAK_DURATION = 5 * 60;
 
-        const WORK_DURATION = userSetting.workDuration;
-        const BREAK_DURATION = userSetting.breakDuration;
+    let isWork = true;
+    let timeLeft = WORK_DURATION;
+    let timerInterval = null;
+    let isRunning = false;
 
-        let isWork = true;
-        let timeLeft = WORK_DURATION;
-        let timerInterval = null;
-        let isRunning = false;
+    const timeDiv = document.getElementById('time');
+    const nameDiv = document.getElementById('name');
+    const circleDiv = document.getElementById('circle');
+    const startIcon = document.getElementById('start-icon');
+    const stopIcon = document.getElementById('stop-icon');
 
-        const timeDiv = document.getElementById('time');
-const nameDiv = document.getElementById('name');
-const circleDiv = document.getElementById('circle');
-const startIcon = document.getElementById('start-icon');
-const stopIcon = document.getElementById('stop-icon');
+    function formatTime(seconds) {
+      const m = String(Math.floor(seconds / 60)).padStart(2, '0');
+      const s = String(seconds % 60).padStart(2, '0');
+      return `${m}:${s}`;
+    }
 
-function formatTime(seconds) {
-    const m = String(Math.floor(seconds / 60)).padStart(2, '0');
-    const s = String(seconds % 60).padStart(2, '0');
-    return `${m}:${s}`;
-}
-
-function changeName(text) {
-    const name = document.getElementById('name');
-    name.style.opacity = '0';
-    setTimeout(() => {
+    function changeName(text) {
+      const name = document.getElementById('name');
+      name.style.opacity = '0';
+      setTimeout(() => {
         name.textContent = text;
         name.style.opacity = '1';
-    }, 500);
-}
+      }, 500);
+    }
 
 
-function updateDisplay() {
-    timeDiv.textContent = formatTime(timeLeft);
-    //nameDiv.textContent = isWork ? 'Работа' : 'Отдых';
-    circleDiv.style.backgroundColor = isWork ? 'rgba(198, 231, 248, 0.3)' : 'rgba(217, 248, 198, 0.3)';
-}
+    function updateDisplay() {
+      timeDiv.textContent = formatTime(timeLeft);
+      //nameDiv.textContent = isWork ? 'Работа' : 'Отдых';
+      circleDiv.style.backgroundColor = isWork ? 'rgba(198, 231, 248, 0.3)' : 'rgba(217, 248, 198, 0.3)';
+    }
 
-function switchMode() {
-    isWork = !isWork;
-    timeLeft = isWork ? WORK_DURATION : BREAK_DURATION;
-    updateDisplay();
-}
+    function switchMode() {
+      isWork = !isWork;
+      timeLeft = isWork ? WORK_DURATION : BREAK_DURATION;
+      updateDisplay();
+    }
 
-function startTimer() {
-    if (timerInterval) return;
+    function startTimer() {
+      if (timerInterval) return;
 
-    timerInterval = setInterval(() => {
+      timerInterval = setInterval(() => {
         timeLeft--;
         updateDisplay();
 
         if (timeLeft <= 0) {
-            clearInterval(timerInterval);
-            timerInterval = null;
-            switchMode();
-            changeName(isWork ? 'Работа' : 'Отдых')
-            startTimer();
+          clearInterval(timerInterval);
+          timerInterval = null;
+          switchMode();
+          changeName(isWork ? 'Работа' : 'Отдых')
+          startTimer();
         }
-    }, 1000);
-}
+      }, 1000);
+    }
 
-function stopTimer() {
-    clearInterval(timerInterval);
-    timerInterval = null;
-}
-circleDiv.addEventListener('click', () => {
-    if (isRunning) {
+    function stopTimer() {
+      clearInterval(timerInterval);
+      timerInterval = null;
+    }
+    circleDiv.addEventListener('click', () => {
+      if (isRunning) {
         stopTimer();
         stopIcon.style.display = 'none';
         startIcon.style.display = 'block';
-    } else {
+      } else {
         startTimer();
         startIcon.style.display = 'none';
         stopIcon.style.display = 'block';
+      }
+      isRunning = !isRunning
+    });
+
+
+    updateDisplay();
+    stopTimer();
+    function settings() {
+      window.location.href = 'settings.html';
     }
-    isRunning = !isRunning
-});
+
+    function folders() {
+      setTimeout(() => {
+        window.location.href = 'folders.html';
+      }, 0);
+    }
 
 
-updateDisplay();
-stopTimer();
+    try {
+      localStorage.getItem('flower')
+    }
+
+    catch {
+      localStorage.setItem("flower", 0);
+    }
 
 
-    </script>
+
+    const garden = document.body;
+    const flowerCount = 11;
+    const flowers = [];
+    const flowerslocation = [
+      [30, 303],   // 01_2
+      [280, 458],  // 02_2
+      [295, 250],  // 03_1
+      [494, 325], // 04_1
+      [500, 530],  // 03_2
+      [700, 500],
+      [720, 630], // 05_2
+      [800, 400],  // 01_1
+      [980, 500],  // 04_2
+      [1030, 363],  // 05_1
+      [1350, 455], //02_1
+    ];
+
+
+    const flowersName = ['01_2', '02_2', '03_1', '04_1', '03_2', '0', '05_2', '01_1', '04_2', '05_1', '02_1'];
+
+    let mouseX = null;
+    let prevMouseX = null;
+    let isMouseInside = false;
+    let windTime = 0;
+
+    const oneflower = document.getElementById('flower')
+    oneflower.classList.add('flower');
+    const left = 1150;
+    const bottom = 200;
+    oneflower.style.left = `${left}px`;
+    oneflower.style.bottom = `${bottom}px`;
+
+    const img = document.createElement("img");
+    flowerGrow = localStorage.getItem('flower')
+    img.src = `pic/${flowerGrow++}.png`;
+
+    localStorage.setItem("flower", flowerGrow % 3);
+
+    oneflower.appendChild(img);
+
+    garden.appendChild(oneflower);
+
+    flowers.push({
+      el: oneflower,
+      x: left,
+      angle: 0,
+      targetAngle: 0,
+    });
+
+    let currentX = 50;
+    const groundY = 400;
+    for (let i = 0; i < flowerCount; i++) {
+      const flower = document.createElement("div");
+      flower.className = "flower";
+
+      const left = flowerslocation[i][0];
+      const top = flowerslocation[i][1];
+      flower.style.left = `${left}px`;
+      flower.style.top = `${top}px`;
+
+      const img = document.createElement("img");
+      img.src = `pic/${flowersName[i]}.png`;
+
+      img.style.transform = `scale(1)`;
+
+      flower.appendChild(img);
+
+      garden.appendChild(flower);
+
+      flowers.push({
+        el: flower,
+        x: left,
+        angle: 0,
+        targetAngle: 0,
+      });
+    }
+
+    document.addEventListener("mousemove", (e) => {
+      isMouseInside = true;
+      prevMouseX = mouseX;
+      mouseX = e.clientX;
+    });
+
+    document.addEventListener("mouseleave", () => {
+      isMouseInside = false;
+    });
+
+    function animate() {
+
+      requestAnimationFrame(animate);
+      windTime += 0.01;
+
+      flowers.forEach((f, i) => {
+        const flowerRect = f.el.getBoundingClientRect();
+        const centerX = flowerRect.left + flowerRect.width / 2;
+        let windAngle = Math.sin(windTime + i) * 1.5; // синус ветра
+
+        if (isMouseInside && prevMouseX !== null && mouseX !== null) {
+          const dx = mouseX - prevMouseX;
+          const distance = Math.abs(centerX - mouseX);
+          const proximity = Math.max(0, 300 - distance); // чем ближе — тем сильнее качается
+          f.targetAngle = (dx / 70) * (proximity / 500) * 20 + windAngle;
+        } else {
+          f.targetAngle = windAngle;
+        }
+
+        f.angle += (f.targetAngle - f.angle) * 0.1;
+
+        f.el.style.transform = `rotate(${f.angle}deg)`;
+      });
+
+      prevMouseX = mouseX;
+    }
+
+    animate();
+
+    window.addEventListener("resize", () => {
+      flowers.forEach(f => {
+        f.x = parseFloat(f.el.style.left);
+      });
+    });
+
+</script>
 
 </body>
 
