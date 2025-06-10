@@ -54,6 +54,7 @@ public class Threads {
 
     public void setWall(Walls wall) {
         this.wall = wall;
+        this.wallId = wall.getId();
     }
 
     public int getNoteId1() {

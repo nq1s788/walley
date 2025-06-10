@@ -52,6 +52,11 @@ public class Notes {
         NoteClass = noteClass;
     }
 
+    public void setWall(Walls wall) {
+        this.wall = wall;
+        this.wallId = wall.getId();
+    }
+
     public Long getId() {
         return id;
     }

@@ -89,7 +89,7 @@ public class BoardController {
             }
 
 
-            List<Notes> old_notes = (List<Notes>) session.getAttribute("notes");
+            List<Notes> old_notes = notesRepository.findAllByWallId(old_wall.get().getId());
             if (old_notes.isEmpty()) {
                 System.out.println("нет старых заметок");
             }
@@ -132,6 +132,7 @@ public class BoardController {
                     System.out.println(new_note.getDataY());
                     if (!notesRepository.existsById(new_note.getId())) {
                         new_note.setVersion(null);
+                        new_note.setWall(old_wall.get());
                         System.out.println("ща положит");
                         notesRepository.save(new_note);
                     }
@@ -139,7 +140,7 @@ public class BoardController {
                 }
             }
 
-            List<Threads> old_threads = (List<Threads>) session.getAttribute("threads");
+            List<Threads> old_threads = threadsRepository.findAllByWallId(old_wall.get().getId());
             for (Threads old_thread : old_threads) {
                 Boolean is_deleted = true;
                 for (Threads new_thread : threads) {
@@ -161,6 +162,7 @@ public class BoardController {
                 if (is_new) {
                     if (!threadsRepository.existsById(new_thread.getId())) {
                         new_thread.setVersion(null);
+                        new_thread.setWall(old_wall.get());
                         threadsRepository.save(new_thread);
                     }
                 }
