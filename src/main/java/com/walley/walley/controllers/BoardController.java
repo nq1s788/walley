@@ -36,6 +36,7 @@ public class BoardController {
             Optional<Walls> optionalWall = wallsRepository.findById(id);
             if (optionalWall.isPresent()) {
                 Walls wall = optionalWall.get();
+                System.out.println(wall.getId());
                 List<Notes> notes = notesRepository.findAllByWallId(wall.getId());
                 List<Threads> threads = threadsRepository.findAllByWallId(wall.getId());
                 Long lastWallId = notesRepository.findMaxId();
@@ -60,27 +61,32 @@ public class BoardController {
     }
     @PostMapping("/board/{id}")
     public String boardMain(@PathVariable Long id, HttpSession session, Model model,
-                            @RequestBody BoardRequest request) {
+                            @RequestBody(required = false) BoardRequest request){
         String action = request.getAction();
         Walls wall = request.getWall();
         List<Notes> notes = request.getNotes();
         List<Threads> threads = request.getThreads();
 
         System.out.println("Received action: " + action);
-        if ("garden".equals(action)) {
+        /*if ("garden".equals(actionBack)) {
             return "redirect:/garden";
-        } if ("folders".equals(action)) {
+        } if ("folders".equals(actionBack)) {
             return "redirect:/folders";
-        }
+        }*/
         if ("update".equals(action)) {
             System.out.println("дошли до обновления");
-            System.out.println(wall.getTitle());
             MyUser user = (MyUser) session.getAttribute("user");
-            Walls old_wall = (Walls) session.getAttribute("wall");
-            old_wall.setTitle(wall.getTitle());
-            old_wall.setBackground(wall.getBackground());
-            old_wall.setFont(wall.getFont());
-            wallsRepository.save(old_wall);
+
+            Walls wallOptional = (Walls) session.getAttribute("wall");
+            System.out.println(wallOptional.getId());
+            Optional<Walls> old_wall = wallsRepository.findById(wallOptional.getId());
+            if (old_wall.isPresent()) {
+                old_wall.get().setTitle(wall.getTitle());
+                old_wall.get().setBackground(wall.getBackground());
+                old_wall.get().setFont(wall.getFont());
+                //wallsRepository.save(old_wall);
+            }
+
 
             List<Notes> old_notes = (List<Notes>) session.getAttribute("notes");
             for (Notes old_note : old_notes) {

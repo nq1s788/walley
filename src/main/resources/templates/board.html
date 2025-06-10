@@ -75,14 +75,14 @@
             <button data-action="share"><img src="/icons/share.svg"></button>
         </div>
         <div id="name-board" contenteditable="true">Новая доска</div>
-        <form action="/" method="post" id="formPost">
+
 
         <div id="out-settings">
-            <button type="submit" name="action" value="garden"><img src="/icons/garden.svg" ></button>
-            <button type="submit" name="action" value="folders"><img src="/icons/folders.svg" style="width: 93%;"></button>
+            <button onclick="garden()"><img src="/icons/garden.svg" ></button>
+            <button onclick="folders()"><img src="/icons/folders.svg" style="width: 93%;"></button>
 
         </div>
-        </form>
+
 
     </div>
 
@@ -100,8 +100,8 @@
 
         const form = document.getElementById("formPost");
 
-  form.action = `/board/${idFromUrl}`;
-  console.log(form.action);
+  //form.action = `/board/${idFromUrl}`;
+  //console.log(form.action);
 
         });
 
@@ -170,10 +170,10 @@
       //boardName.textContent = boardInf.name;
 
       function folders() {
-          window.location.href = 'folders.html';
+          window.location.href = '/folders';
       }
       function garden() {
-          window.location.href = 'garden.html';
+          window.location.href = '/garden';
       }
       function setTool(newTool) {
           tool = newTool;
@@ -897,8 +897,8 @@ function postWallJSONs() {
         id: note.id,
         wallid: wallid,
         NoteClass: note.classList[1],
-        dataX: note.dataset.x,
-        dataY: note.dataset.y,
+        dataX: Math.floor(note.dataset.x),
+        dataY: Math.floor(note.dataset.y),
         color: getComputedStyle(note).background,
         IsHeadline: note.dataset.ish,
         Istime: note.dataset.ist,
@@ -915,7 +915,7 @@ function postWallJSONs() {
         wallid: wallid,
         email: wallJSON.email,
         user: wallJSON.user,
-        title: boardName.textContent.trim(),
+        title: wallJSON.title,
         createdAt: wallJSON.createdAt,
         background: getComputedStyle(document.getElementById('board-container')).background,
         font: getComputedStyle(document.body).fontFamily,
@@ -935,17 +935,16 @@ function postWallJSONs() {
     const action = "update";
 
     fetch(`/board/${wallId}`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            action: action,
-            notes: notesJSON,
-            threads: threadsJSON,
-            wall: wallJSON_new
-
-        }),
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        action: action,
+        notes: notesJSON,
+        threads: threadsJSON,
+        wall: wallJSON_new
+    }),
     })
     .catch((error) => {
         console.error('Error:', error);

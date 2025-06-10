@@ -12,4 +12,5 @@ import java.util.List;
 public interface WallsRepository extends CrudRepository<Walls, Long> {
     List<Walls> findAllByEmail(String email);
     Walls findById(long id);
+    void deleteById(long wallId);
 }
