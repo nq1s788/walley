@@ -128,9 +128,9 @@
             });
 
             actions.querySelector(".delete-btn").addEventListener("click", () => {
-                //boards.splice(index, 1);
-                const target = e.target;
-                const row = target.closest("tr");
+
+                //const target = e.target;
+                //const row = target.closest("tr");
 
                 if (!row) return;
                 const wallid = row.dataset.wallid;
@@ -152,11 +152,14 @@
                     .catch(error => {
                         console.error('Произошла ошибка:', error);
                     });
+                boards.splice(index, 1);
                 renderTable();
+
             });
 
-            actions.querySelector(".rename-btn").addEventListener("click", () => {
-                const target = e.target;
+            actions.querySelector(".rename-btn").addEventListener("click", (e) => {
+            e.preventDefault();
+                //const target = e.target;
                 titleCell.contentEditable = true;
                 titleCell.focus();
 
@@ -166,13 +169,13 @@
                         board.title = titleCell.textContent.trim();
                         titleCell.removeAttribute("contentEditable");
 
-                        const row = target.closest("tr");
+                        //const row = target.closest("tr");
                         if (!row) return;
                         const wallid = row.dataset.wallid;
 
                         const params = new URLSearchParams();
                         params.append('wallid', wallid);
-                        params.append('title', title);
+                        params.append('title', board.title);
                         params.append('action', 'rename');
 
                         fetch('/folders', {
@@ -272,7 +275,8 @@
 
     searchInput.addEventListener("input", renderTable);
 
-    addButton.addEventListener("click", () => {
+    addButton.addEventListener("click", (e) => {
+     e.preventDefault();
     const now = new Date();
     const date = now.toLocaleDateString("ru-RU").slice(0, 8);
     const createdAt = now.toLocaleTimeString("ru-RU", { hour: '2-digit', minute: '2-digit' });
@@ -280,9 +284,9 @@
     const newBoard = {
         title: `Новая доска ${boardCounter++}`,
         email: userSetting.username,
-        date,
         createdAt
     };
+
 
     const params = new URLSearchParams();
     params.append('title', newBoard.title);
@@ -303,12 +307,16 @@
     })
     .then(updatedBoards => {
         boards = updatedBoards; // Обновляем массив досок
-        //renderTable(); // Обновляем таблицу
-        location.reload();
+        console.log('lol', boards);
+        renderTable(); // Обновляем таблицу
+        //location.reload();
     })
     .catch(error => {
         console.error('Произошла ошибка:', error);
     });
+    //boards.push(newBoard);
+    //renderTable();
+
 });
 
 /*
