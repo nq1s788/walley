@@ -79,6 +79,9 @@ public class MainController {
             session.setAttribute("userSetting", userSetting);
             session.setAttribute("userStat", userStat);
             session.setAttribute("userTimer", userTimer);
+
+            model.addAttribute("newUser", 1);
+            session.setAttribute("newUser", 1);
             return "redirect:/garden";
         } else if ("login".equals(action)) {
             if (!service.validateUser(email, password)) {
@@ -89,6 +92,9 @@ public class MainController {
             session.setAttribute("userSetting", userSettingRepository.findByEmail(email));
             session.setAttribute("userStat", userStatRepository.findByEmail(email));
             session.setAttribute("userTimer", userTimerRepository.findByEmail(email));
+
+            model.addAttribute("newUser", 0);
+            session.setAttribute("newUser", 0);
             return "redirect:/garden"; // Перенаправление на страницу после входа
         }
         return "index"; // На всякий случай
