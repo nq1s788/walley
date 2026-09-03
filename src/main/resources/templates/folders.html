@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Walley — Папки</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bad+Script&family=Bitter:ital,wght@0,100..900;1,100..900&family=Comfortaa:wght@300..700&family=Jost:ital,wght@0,100..900;1,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="/css/folders.css">
+
+</head>
+
+<body>
+<form action="/folders" method="post">
+    <div id="buttons-wrap">
+        <button onclick="garden()" type="submit" name="action" value="garden" >
+            <img src="/icons/garden.svg">
+        </button>
+    </div>
+</form>
+<form id="my-form" action="/folders" method="get">
+    <div id="opacity-back">
+
+        <div id="container">
+            <div id="search-wrap">
+                <img src="icons/search.svg">
+                <input type="text" placeholder="Поиск..." class="search-bar">
+
+            </div>
+
+            <div class="table-wrapper">
+                <table class="board-table">
+                    <thead>
+
+                        <tr>
+                            <th>Название<img onclick="sortBy('title')" src="icons/sort.svg"></th>
+                            <th>Владелец<img onclick="sortBy('email')" src="icons/sort.svg"></th>
+                            <th>Дата создания<img onclick="sortBy('createdAt')" src="/icons/sort.svg"></th>
+                            <th></th>
+
+                        </tr>
+
+                    </thead>
+                    <tbody id="table-body">
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="add-button-wrapper">
+                <button class="add-button"><img src="icons/add-board.svg"></button>
+            </div>
+        </div>
+
+    </div>
+</form>
+<script  th:inline="javascript">
+    function garden() {
+    window.location.href = 'garden.html';
+}
+
+    // тут надо загрузить доски пользователя, поля:
+
+    let boards = [[${boards}]];
+    const userSetting = [[${userSetting}]];
+
+
+    console.log('ДОСКИЭЭЭ', boards); // Проверка данных
+    console.log(userSetting); // Проверка настроек пользователя
+
+    let sortField = null;
+    let sortAsc = true;
+    let boardCounter = 1;
+
+    const tbody = document.getElementById("table-body");
+    const searchInput = document.querySelector(".search-bar");
+    const addButton = document.querySelector(".add-button");
+
+    // --- Инициализация ---
+
+    function renderTable() {
+        tbody.innerHTML = "";
+
+        const filtered = boards.filter(board =>
+            board.title.toLowerCase().includes(searchInput.value.toLowerCase()) ||
+            board.email.toLowerCase().includes(searchInput.value.toLowerCase())
+        );
+
+        filtered.forEach((board, index) => {
+            const row = document.createElement("tr");
+            row.setAttribute('data-wallid', board.id);
+
+            const titleCell = document.createElement("td");
+            titleCell.textContent = board.title;
+
+            const userCell = document.createElement("td");
+            userCell.textContent = board.email;
+
+            const dateCell = document.createElement("td");
+            //dateCell.textContent = `${board.createdAt} | ${board.date}`;
+            dateCell.textContent = `${board.createdAt}`;
+
+            const moreCell = document.createElement("td");
+            moreCell.classList.add("more-button");
+            moreCell.style.zIndex = 999;
+            moreCell.innerHTML = `
+                <img src="icons/more.svg" class="more-icon" style="cursor:pointer;">
+            `;
+
+            const actions = document.createElement("div");
+            actions.classList.add("more-buttons");
+            actions.innerHTML = `
+                <button class="rename-btn">Изменить</button>
+                <button class="delete-btn">Удалить</button>
+            `;
+
+            moreCell.appendChild(actions);
+            row.appendChild(titleCell);
+            row.appendChild(userCell);
+            row.appendChild(dateCell);
+            row.appendChild(moreCell);
+
+            // События "..."
+            moreCell.addEventListener("click", (e) => {
+                e.stopPropagation();
+                actions.style.display = 'flex';
+            });
+
+            actions.querySelector(".delete-btn").addEventListener("click", () => {
+
+                //const target = e.target;
+                //const row = target.closest("tr");
+
+                if (!row) return;
+                const wallid = row.dataset.wallid;
+
+                const params = new URLSearchParams();
+                params.append('wallid', wallid);
+                params.append('action', 'delete');
+
+                fetch('/folders', {
+                    method: 'POST',
+                    body: params
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Ошибка при запросе к серверу');
+                        }
+                        return response.json();
+                    })
+                    .catch(error => {
+                        console.error('Произошла ошибка:', error);
+                    });
+                boards.splice(index, 1);
+                renderTable();
+
+            });
+
+            actions.querySelector(".rename-btn").addEventListener("click", (e) => {
+            e.preventDefault();
+                //const target = e.target;
+                titleCell.contentEditable = true;
+                titleCell.focus();
+
+                titleCell.addEventListener("keydown", (e) => {
+                    if (e.key === "Enter") {
+                        e.preventDefault();
+                        board.title = titleCell.textContent.trim();
+                        titleCell.removeAttribute("contentEditable");
+
+                        //const row = target.closest("tr");
+                        if (!row) return;
+                        const wallid = row.dataset.wallid;
+
+                        const params = new URLSearchParams();
+                        params.append('wallid', wallid);
+                        params.append('title', board.title);
+                        params.append('action', 'rename');
+
+                        fetch('/folders', {
+                            method: 'POST',
+                            body: params
+                        })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Ошибка при запросе к серверу');
+                                }
+                                return response.json();
+                            })
+                            .catch(error => {
+                                console.error('Произошла ошибка:', error);
+                            });
+                    }
+                });
+            });
+
+            row.addEventListener("click", (e) => toBoard(e));
+            tbody.appendChild(row);
+        });
+    }
+
+    function sortBy(field) {
+        sortAsc = sortField === field ? !sortAsc : true;
+        sortField = field;
+
+        boards.sort((a, b) => {
+            let valA, valB;
+
+            if (field === "date") {
+                valA = a.date.split('.').reverse().join('.') + '.' + a.time;
+                valB = b.date.split('.').reverse().join('.') + '.' + b.time;
+            } else {
+                valA = a[field].toLowerCase();
+                valB = b[field].toLowerCase();
+            }
+
+            if (sortAsc) return valA > valB ? 1 : valA < valB ? -1 : 0;
+            else return valA < valB ? 1 : valA > valB ? -1 : 0;
+        });
+
+        renderTable();
+    }
+
+    function toBoard(e) {
+    const target = e.target;
+
+    if (
+        target.closest(".more-button") ||
+        target.closest(".more-buttons") ||
+        (target.tagName === "TD" && target.hasAttribute("contenteditable"))
+    ) {
+        return;
+    }
+
+    const row = target.closest("tr");
+    if (!row) return;
+    console.log("дошли до toboard");
+
+    const name = row.querySelector("td")?.textContent.trim() || "";
+    const wallid = row.dataset.wallid;
+
+    const boardInf = { name };
+
+    const params = new URLSearchParams();
+    params.append('wallid', wallid);
+    params.append('action', 'toBoard');
+
+    fetch('/folders', {
+        method: 'POST',
+        body: params
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Ошибка при запросе к серверу');
+        }
+        return response.json(); // Ожидаем JSON-ответ
+    })
+    .then(data => {
+        // Проверяем, если это ID доски
+        if (typeof data === 'number') {
+            window.location.href = "/board/" + data; // Переход на страницу доски по ID
+        } else {
+            console.error('Не удалось получить ID доски:', data);
+        }
+    })
+    .catch(error => {
+        console.error('Произошла ошибка:', error);
+    });
+}
+
+
+
+
+
+    searchInput.addEventListener("input", renderTable);
+
+    addButton.addEventListener("click", (e) => {
+    e.preventDefault();
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0'); // Месяцы 0-11, добавляем 1
+    const day = String(now.getDate()).padStart(2, '0');
+
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+
+    const formattedDate = `${year}.${month}.${day}`;
+    const formattedTime = `${hours}:${minutes}`;
+    const createdAt = `${formattedDate} ${formattedTime}`;
+
+    console.log(createdAt);
+
+    const newBoard = {
+        title: `Новая доска ${boardCounter++}`,
+        email: userSetting.username,
+        createdAt
+    };
+
+
+    const params = new URLSearchParams();
+    params.append('title', newBoard.title);
+    params.append('createdAt' ,newBoard.createdAt);
+    params.append('action', 'create');
+
+   fetch('/folders', {
+        method: 'POST',
+        body: params,
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Ошибка при отправке данных на сервер');
+        }
+        return response.json();
+    })
+    .then(updatedBoards => {
+        boards = updatedBoards; // Обновляем массив досок
+        console.log('lol', boards); //
+        renderTable(); // Обновляем таблицу
+        //location.reload();
+    })
+    .catch(error => {
+        console.error('Произошла ошибка:', error);
+    });
+    //boards.push(newBoard);
+    //renderTable();
+
+});
+
+/*
+addButton.addEventListener("click", () => {
+    const now = new Date();
+    const date = now.toLocaleDateString("ru-RU").slice(0, 8);
+    const createdAt = now.toLocaleTimeString("ru-RU", { hour: '2-digit', minute: '2-digit' });
+
+    const newBoard = {
+        //id: '${boardCounter++}';
+        title: `Новая доска ${boardCounter++}`,
+        email: userSetting.username,
+        date,
+        createdAt
+    };
+
+    //boards.push(newBoard); // Добавляем доску в массив
+
+    const params = new URLSearchParams();
+    params.append('title', newBoard.title);
+    params.append('action', 'create');
+
+    fetch('/folders', {
+        method: 'POST',
+        body: params
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Ошибка при сохранении доски');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Доска успешно сохранена:', data);
+    })
+    .catch(error => {
+        console.error('Произошла ошибка:', error);
+    });
+
+    console.log(boards);
+    renderTable(); // Обновляем таблицу
+});
+
+*/
+
+
+    document.addEventListener("click", (e) => {
+        if (
+            !e.target.classList.contains("more-icon") &&
+            !e.target.classList.contains("more-button")
+        ) {
+            document.querySelectorAll(".more-buttons").forEach(el => {
+                el.style.display = "none";
+            });
+        }
+    });
+
+
+    renderTable();
+</script>
+
+</body>
+
+
+
+</html>
